@@ -96,7 +96,7 @@ const JoinUs = () => {
           className="flex flex-col items-start text-left justify-center"
         >
           <Copy delay={0.2}>
-          <div className="text-xl sm:text-4xl lg:text-5xl font-bold leading-tight">
+          <div className="text-xl lg:text-2xl xl:text-4xl max-w-full font-bold leading-tight">
             At UESC, you can sharpen your English skills in a supportive environment, gain hands-on experience in public speaking and debating, connect with like-minded peers and mentors, and unlock leadership opportunities for personal growth—all while being part of UMN’s vibrant student community.
           </div>
           </Copy>

@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Copy from "./template/Copy";
 import { useTransitionRouter } from "next-view-transitions";
 import { usePathname } from "next/navigation";
+import { useRevealer } from "./template/useRevealer";
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -181,6 +182,8 @@ const Hero = ({ isLoading = false }) => {
     });
   };
 
+  useRevealer();
+
   return (
     <section
       id="hero"
@@ -211,18 +214,24 @@ const Hero = ({ isLoading = false }) => {
       <div className="hero-content relative z-10 text-white w-full h-full flex flex-col justify-between p-4 sm:p-6">
         <div
           ref={topNavRef}
-          className="flex justify-between items-center text-4xl sm:text-5xl lg:text-6xl font-bold uppercase"
+          className="flex justify-between items-center text-4xl sm:text-4xl md:text-5xl xl:text-6xl font-bold uppercase"
         >
           <span>UESC</span>
-          <div className="hidden md:flex flex-1 text-lg sm:text-xl lg:text-2xl justify-center">
+          <div className="hidden md:flex flex-1 text-lg md:text-xl xl:text-2xl justify-center">
             <span className="slot-link relative h-[1.1em] overflow-hidden block cursor-pointer">
+              <span className="inner-wrapper block relative">
+                 <a className="inner-text block" href="/activity" onClick={(e) => handdleNavigation(e, "/activity")}>What We Do</a>
+                <a className="inner-text block absolute top-full" href="/activity" onClick={(e) => handdleNavigation(e, "/activity")}>What We Do</a>
+              </span>
+            </span>
+              <span className="slot-link relative h-[1.1em] overflow-hidden block cursor-pointer">
               <span className="inner-wrapper block relative">
                  <a className="inner-text block" href="/" onClick={(e) => handdleNavigation(e, "/")}>What We Do</a>
                 <a className="inner-text block absolute top-full" href="/" onClick={(e) => handdleNavigation(e, "/")}>What We Do</a>
               </span>
             </span>
           </div>
-          <div className="flex gap-4 sm:gap-6 text-lg sm:text-xl lg:text-2xl">
+          <div className="flex gap-4 sm:gap-6 text-lg md:text-xl xl:text-2xl">
             <a
               href="https://www.instagram.com/uesc_umn/"
               target="_blank"
@@ -240,7 +249,7 @@ const Hero = ({ isLoading = false }) => {
 
         <div
           ref={centerLinksRef}
-          className="flex flex-row justify-between items-center w-full gap-4 sm:gap-6 lg:gap-10 text-lg sm:text-xl lg:text-2xl font-bold uppercase"
+          className="flex flex-row justify-between items-center w-full gap-4 sm:gap-6 lg:gap-10 text-lg md:text-xl xl:text-2xl font-bold uppercase"
         >
           {centerLinks.map((text, i) => (
             <span
@@ -264,13 +273,11 @@ const Hero = ({ isLoading = false }) => {
         >
 
           <Copy delay={3}>
-          <p className="max-w-full lg:max-w-2xl font-bold text-xl sm:text-2xl lg:text-3xl leading-relaxed text-left">
-            UESC (UMN English Student Council) is an organization that empowers UMN students
-            to develop their English skills through engaging activities, competitions, and
-            community-building programs.
+          <p className="max-w-full lg:max-w-3xl font-bold text-xl sm:text-2xl lg:text-3xl leading-relaxed text-left">
+            UESC (UMN English Student Council) is an organization that empowers UMN students to develop their English skills through engaging activities, competitions, and community-building programs.
           </p>
           </Copy>
-          <span className="slot-link relative h-[1.2em] overflow-hidden block cursor-pointer uppercase font-bold text-lg sm:text-xl lg:text-2xl ml-0 sm:ml-auto self-start sm:self-end mt-4 sm:mt-0">
+          <span className="slot-link relative h-[1.2em] overflow-hidden block cursor-pointer uppercase font-bold text-lg md:text-xl xl:text-2xl ml-0 sm:ml-auto self-start sm:self-end mt-4 sm:mt-0">
             <span className="inner-wrapper block relative">
               <span className="inner-text block">Scroll Down</span>
               <span className="inner-text block absolute top-full">Scroll Down</span>

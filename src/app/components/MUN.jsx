@@ -73,7 +73,7 @@ const MUN = () => {
         <div ref={titleRef} className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12">
           <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black uppercase leading-none mb-4 sm:mb-0">
           </h1>
-          <h2 className="text-5xl sm:text-7xl lg:text-8xl font-black uppercase self-end leading-none">
+          <h2 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black uppercase self-end leading-none">
             MODEL UNITED NATIONS
           </h2>
         </div>

@@ -75,7 +75,7 @@ const Footer = () => {
             <ul className="space-y-2 sm:space-y-3">
               {navLinks.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-2xl md:text-4xl lg:text-5xl font-bold">
+                  <a href={link.href} className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold">
                     <span className="slot-link relative h-[1.1em] overflow-hidden block cursor-pointer">
                       <span className="inner-wrapper block relative">
                         <span className="inner-text block">{link.name}</span>
@@ -89,7 +89,7 @@ const Footer = () => {
           </div>
 
           {/* Right Section: Contact Info */}
-          <div className="lg:col-span-1 text-left text-xl md:text-2xl lg:text-3xl">
+          <div className="lg:col-span-1 text-left text-lg md:text-xl lg:text-2xl xl:text-3xl">
             <div>
               <p className="mb-4">UMN English Student Council (UESC) Empowering Voices, Building Confidence, Creating Community</p>
               <p>

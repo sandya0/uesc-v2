@@ -7,16 +7,6 @@ import Copy from "./template/Copy";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const textContent = [
-  "At UESC, we believe English is more than just a language —",
-  "it's a tool for expression, collaboration, and global connection.",
-  "We are a student activity unit at Universitas Multimedia",
-  "Nusantara (UMN), dedicated to improving our members' English",
-  "skills while fostering leadership, creativity, and teamwork.",
-  "With divisions ranging from Debate to Scrabble Speech, and", 
-  "Model United Nations (MUN), UESC offers a platform for", 
-  "every student to shine.",
-];
 
 const AboutUs = () => {
   const aboutRef = useRef(null);
@@ -29,7 +19,6 @@ const AboutUs = () => {
     const el = aboutRef.current;
     const title = titleRef.current;
     const image = imageRef.current;
-    const lines = gsap.utils.toArray(textRef.current.querySelectorAll(".line"));
     const link = linkRef.current;
 
     const ctx = gsap.context(() => {
@@ -38,7 +27,6 @@ const AboutUs = () => {
       gsap.set(title, { y: 50 });
       gsap.set(image, { scale: 0.95 });
       gsap.set(link, { y: 20 });
-      gsap.set(lines, { yPercent: 100, autoAlpha: 0 });
 
       // Timeline for scroll animation
       const tl = gsap.timeline({
@@ -51,11 +39,6 @@ const AboutUs = () => {
 
       tl.to(title, { autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out" })
         .to(image, { autoAlpha: 1, scale: 1, duration: 0.8, ease: "power3.out" }, "-=0.5")
-        .to(
-          lines,
-          { yPercent: 0, autoAlpha: 1, stagger: 0.2, duration: 1, ease: "expo.out" },
-          "-=0.6"
-        )
         .to(link, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out" }, "-=0.4");
 
       // Slot link hover animation
@@ -92,7 +75,7 @@ const AboutUs = () => {
       <div className="w-full mx-auto">
         <h1
           ref={titleRef}
-          className="text-5xl sm:text-8xl lg:text-9xl font-bold uppercase mb-12 sm:mb-16 text-left w-full"
+          className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold uppercase mb-12 sm:mb-16 text-left w-full"
         >
           About Us
         </h1>
@@ -122,10 +105,8 @@ const AboutUs = () => {
             className="flex flex-col items-start text-left space-y-6"
           >
             <Copy delay={0.2}>
-            <div className="text-xl sm:text-3xl lg:text-4xl leading-relaxed font-bold">
-              At UESC, we believe English is more than just a language — it is a tool for expression, collaboration, and global connection.
-              We are a student activity unit at Universitas Multimedia Nusantara (UMN), dedicated to enhancing our members’ English skills while fostering leadership, creativity, and teamwork.
-              With divisions ranging from Debate, Speech, and Scrabble to Model United Nations (MUN), UESC provides a platform for every student to grow, excel, and shine.
+            <div className="max-w-full text-xl lg:text-2xl xl:text-4xl leading-relaxed font-bold">
+              At UESC, we believe English is more than just a language — it is a tool for expression, collaboration, and global connection. We are a student activity unit at Universitas Multimedia Nusantara (UMN), dedicated to enhancing our members’ English skills while fostering leadership, creativity, and teamwork. With divisions ranging from Debate, Speech, and Scrabble to Model United Nations (MUN), UESC provides a platform for every student to grow, excel, and shine.
             </div>
             </Copy>
 

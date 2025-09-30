@@ -54,7 +54,7 @@ const Slogan = () => {
         {word.split("").map((char, i) => (
           <span
             key={i}
-            className="slot-wrapper relative inline-block h-[1em] overflow-hidden"
+            className="slot-wrapper relative inline-block h-[1.1em] overflow-hidden"
           >
             <span className="inner-wrapper block relative">
               <span className="block">{char}</span>
@@ -81,11 +81,11 @@ const Slogan = () => {
 
       {/* Slogan Text - Centered */}
       <div className="flex-1 flex flex-col justify-center items-center px-6 sm:px-12 lg:px-16">
-        <h2 className="text-4xl sm:text-7xl lg:text-8xl font-extrabold uppercase tracking-wide leading-tight text-center sm:text-left w-full">
+        <h2 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-extrabold uppercase tracking-wide leading-tight text-center sm:text-left w-full">
           {renderSlotWords("Empowering Voices")}
         </h2>
 
-        <h2 className="text-4xl sm:text-7xl lg:text-8xl font-extrabold uppercase tracking-wide leading-tight mt-2 sm:mt-4 text-center sm:text-right w-full">
+        <h2 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-extrabold uppercase tracking-wide leading-tight mt-2 sm:mt-4 text-center sm:text-right w-full">
           {renderSlotWords("Building Confidence")}
         </h2>
       </div>
