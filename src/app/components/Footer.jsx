@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef } from 'react';
-import { gsap } from "gsap";
+import React from 'react';
+import Link from './template/Link';
+import Image from 'next/image';
 
 const Footer = () => {
   const navLinks = [
@@ -13,58 +14,20 @@ const Footer = () => {
     { name: "Speech", href: "#Speech-activities" },
   ];
 
-  const footerRef = useRef(null);
-
-  useEffect(() => {
-    const slotLinks = footerRef.current.querySelectorAll(".slot-link");
-
-    const listeners = [];
-    slotLinks.forEach((linkWrapper) => {
-      const innerWrapper = linkWrapper.querySelector(".inner-wrapper");
-
-      const handleEnter = () => {
-        gsap.to(innerWrapper, {
-          y: "-100%",
-          duration: 0.3,
-          ease: "power2.inOut",
-        });
-      };
-
-      const handleLeave = () => {
-        gsap.to(innerWrapper, {
-          y: "0%",
-          duration: 0.3,
-          ease: "power2.inOut",
-        });
-      };
-
-      linkWrapper.addEventListener("mouseenter", handleEnter);
-      linkWrapper.addEventListener("mouseleave", handleLeave);
-
-      listeners.push({ el: linkWrapper, enter: handleEnter, leave: handleLeave });
-    });
-
-    return () => {
-      listeners.forEach(({ el, enter, leave }) => {
-        el.removeEventListener("mouseenter", enter);
-        el.removeEventListener("mouseleave", leave);
-      });
-    };
-  }, []);
-
   return (
-    <footer className="text-black font-sans min-h-screen flex flex-col py-16 px-6 sm:px-8 lg:px-16" ref={footerRef}>
+    <footer className="text-black font-sans min-h-screen flex flex-col py-16 px-6 sm:px-8 lg:px-16">
       <div className="w-full flex-grow flex flex-col justify-center">
         {/* Main content grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           
           {/* Left Section: Image and Logo */}
           <div className="lg:col-span-1">
-            <div className="w-full mb-8 overflow-hidden rounded-lg">
-              <img 
-                src="/images/footer.jpg"
+            <div className="w-full h-[400px] relative mb-8 overflow-hidden rounded-lg">
+              <Image 
+                src="/images/footer.webp"
                 alt="UESC Event" 
-                className="w-full h-auto max-h-[300px] sm:max-h-[400px] object-cover"
+                fill
+                className="object-cover"
               />
             </div>
             <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold">UESC</h2>
@@ -75,14 +38,9 @@ const Footer = () => {
             <ul className="space-y-2 sm:space-y-3">
               {navLinks.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold">
-                    <span className="slot-link relative h-[1.1em] overflow-hidden block cursor-pointer">
-                      <span className="inner-wrapper block relative">
-                        <span className="inner-text block">{link.name}</span>
-                        <span className="inner-text block absolute top-full">{link.name}</span>
-                      </span>
-                    </span>
-                  </a>
+                  <Link href={link.href} className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold">
+                    {link.name}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -97,7 +55,9 @@ const Footer = () => {
               </p>
               <div className="mt-6">
                 <a href="mailto:uesc@umn.ac.id" className="block hover:underline">uesc@umn.ac.id</a>
-                <a href="https://www.instagram.com/uesc_umn" target="_blank" rel="noopener noreferrer" className="block hover:underline">@uesc_umn</a>
+                <Link href="https://www.instagram.com/uesc_umn" target="_blank" rel="noopener noreferrer" className="block hover:underline">
+                  @uesc_umn
+                </Link>
               </div>
             </div>
           </div>
@@ -110,14 +70,9 @@ const Footer = () => {
           <p className="text-center sm:text-left">
             © 2025 UMN English Student Council. All Rights Reserved.
           </p>
-          <a href="https://www.instagram.com/uesc_umn" target="_blank" rel="noopener noreferrer">
-            <span className="slot-link relative h-[1.5em] overflow-hidden block cursor-pointer">
-              <span className="inner-wrapper block relative">
-                <span className="inner-text block">Instagram</span>
-                <span className="inner-text block absolute top-full">Instagram</span>
-              </span>
-            </span>
-          </a>
+          <Link href="https://www.instagram.com/uesc_umn" target="_blank" rel="noopener noreferrer">
+            Instagram
+          </Link>
           <p>Made by Sandya</p>
         </div>
       </div>

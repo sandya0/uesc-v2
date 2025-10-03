@@ -24,12 +24,6 @@ html, body {
   scroll-behavior: smooth;
 }
 
-body.loading {
-  overflow: hidden !important;
-  position: fixed;
-  width: 100%;
-}
-
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none !important;

@@ -15,27 +15,10 @@ const Slogan = React.lazy(() => import('./components/Slogan'));
 const Footer = React.lazy(() => import('./components/Footer'));
 
 const App = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [contentVisible, setContentVisible] = useState(false);
-
-  const handleLoadingComplete = () => {
-    setIsLoading(false);
-    setTimeout(() => {
-      setContentVisible(true);
-    }, 100);
-  };
-
   return (
     <ReactLenis root>
-      {isLoading && <LoadingScreen onLoadingComplete={handleLoadingComplete} />}
-      <div
-        className={`transition-all duration-1000 ease-out ${
-          contentVisible
-            ? 'opacity-100 translate-y-0'
-            : 'opacity-0 translate-y-4'
-        }`}
-      >
-        <Hero isLoading={isLoading} />
+      <div>
+        <Hero />
         <AboutUS />
         <Suspense fallback={<div>Loading...</div>}>
           <Debate />
