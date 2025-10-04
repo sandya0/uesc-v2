@@ -68,7 +68,7 @@ const Speech = () => {
         {/* Title Section */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12">
           <Copy>
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black uppercase leading-none mb-4 sm:mb-0">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-8xl font-black uppercase leading-none mb-4 sm:mb-0">
             Speech <br />
           </h1>
           </Copy>
@@ -78,7 +78,7 @@ const Speech = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div 
             ref={image1Ref}
-            className="w-full h-[600px] relative cursor-pointer"
+            className="w-full xl:h-[500px] 2xl:h-[600px] relative cursor-pointer"
           >
             <Image
               src="/images/speech2.webp"
@@ -89,7 +89,7 @@ const Speech = () => {
           </div>
           <div 
             ref={image2Ref}
-            className="w-full h-[500px] relative cursor-pointer"
+            className="w-full xl:h-[400px] 2xl:h-[500px] relative cursor-pointer"
           >
             <Image
               src="/images/speech1.webp"

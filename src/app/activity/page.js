@@ -1,68 +1,227 @@
 "use client";
-import React, { Suspense } from 'react';
+import React from 'react';
 import { ReactLenis } from 'lenis/react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useRevealer } from '../components/template/useRevealer';
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+import { useRef } from "react";
+import Copy from '../components/template/Copy';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const ActivityPage = () => {
   useRevealer();
+
+  const mainTextRef = useRef(null);
+
+  useGSAP(() => {
+    // Split text into individual characters while preserving styling and layout
+    const mainText = mainTextRef.current;
+    const text = mainText.textContent;
+    
+    // Store original computed styles
+    const computedStyles = window.getComputedStyle(mainText);
+    const originalWidth = mainText.offsetWidth;
+    
+    // Clear the original text and create spans for each character
+    mainText.innerHTML = '';
+    
+    // Ensure container maintains its dimensions
+    mainText.style.width = originalWidth + 'px';
+    mainText.style.wordWrap = 'break-word';
+    mainText.style.whiteSpace = 'pre-wrap';
+    
+    text.split('').forEach((char, index) => {
+      const span = document.createElement('span');
+      span.textContent = char;
+      span.style.color = '#1a1a1a'; // Start with dark color (almost black)
+      span.style.display = 'inline';
+      span.style.fontFamily = 'inherit';
+      span.style.fontSize = 'inherit';
+      span.style.fontWeight = 'inherit';
+      span.style.lineHeight = 'inherit';
+      span.style.letterSpacing = 'inherit';
+      span.classList.add(`char-${index}`);
+      mainText.appendChild(span);
+    });
+
+    // Get all character spans
+    const chars = mainText.querySelectorAll('span');
+
+    // Create duplicate subtitle for reveal effect
+    const subtitle = document.querySelector(".about-subtitle");
+    const subtitleText = "DEBATE  &nbsp; AND   &nbsp; SPEECH";
+
+    // Replace the content with the reveal structure
+    subtitle.innerHTML = `
+      <div class="subtitle-container relative overflow-hidden h-full">
+        <div class="subtitle-original">${subtitleText}</div>
+        <div class="subtitle-duplicate absolute top-0 left-0">${subtitleText}</div>
+      </div>
+    `;
+
+    // Scroll-based subtitle animation with distance trigger
+    let lastScrollY = window.scrollY;
+    let scrollDistance = 0;
+    const triggerDistance = 100; // Trigger animation after scrolling 100px
+    let isAnimating = false;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const scrollDelta = Math.abs(currentScrollY - lastScrollY);
+      
+      scrollDistance += scrollDelta;
+      
+      // Trigger animation when scroll distance threshold is reached
+      if (scrollDistance >= triggerDistance && !isAnimating) {
+        isAnimating = true;
+        scrollDistance = 0; // Reset distance counter
+        
+        // Determine scroll direction
+        const scrollingDown = currentScrollY > lastScrollY;
+        
+        // Create timeline for the reveal animation
+        const tl = gsap.timeline({
+          onComplete: () => {
+            isAnimating = false;
+          }
+        });
+        
+        if (scrollingDown) {
+          // Scrolling down - slide original up and duplicate up from bottom
+          tl.to(".subtitle-original", {
+            y: "-100%",
+            duration: 0.6,
+            ease: "power3.out"
+          })
+          .fromTo(".subtitle-duplicate", 
+            { y: "100%" },
+            {
+              y: "0%",
+              duration: 0.6,
+              ease: "power3.out"
+            }, 0) // Start at the same time as the first animation
+          .set(".subtitle-original", { y: "0%" }) // Reset original position
+          .set(".subtitle-duplicate", { y: "100%" }); // Reset duplicate position
+        } else {
+          // Scrolling up - slide original down and duplicate down from top
+          tl.to(".subtitle-original", {
+            y: "100%",
+            duration: 0.6,
+            ease: "power3.out"
+          })
+          .fromTo(".subtitle-duplicate", 
+            { y: "-100%" },
+            {
+              y: "0%",
+              duration: 0.6,
+              ease: "power3.out"
+            }, 0) // Start at the same time as the first animation
+          .set(".subtitle-original", { y: "0%" }) // Reset original position
+          .set(".subtitle-duplicate", { y: "100%" }); // Reset duplicate position for down scroll
+        }
+      }
+      
+      lastScrollY = currentScrollY;
+    };
+
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Character reveal animation
+    gsap.fromTo(chars, 
+      {
+        color: "#1a1a1a", // Start dark
+      },
+      {
+        color: "#ffffff", // End white
+        duration: 0.1,
+        ease: "none",
+        stagger: {
+          amount: 2, // Total time for all characters to animate
+          from: "start"
+        },
+        scrollTrigger: {
+          trigger: ".about-main",
+          start: "top 75%",
+          end: "bottom 25%",
+          scrub: 1, // Smooth scrubbing tied to scroll position
+          toggleActions: "play none none reverse"
+        }
+      }
+    );
+
+    // Main content container animation (opacity and position)
+    gsap.from(".about-main", {
+      opacity: 0,
+      y: 30,
+      duration: 1.2,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: ".about-main",
+        start: "top 75%",
+        end: "bottom 25%",
+        toggleActions: "play none none reverse"
+      }
+    });
+
+    // Animate quote on scroll
+    gsap.from(".about-quote", {
+      opacity: 0,
+      y: 20,
+      duration: 1,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: ".about-quote",
+        start: "top 95%",
+        end: "bottom 5%",
+        toggleActions: "play none none none"
+      }
+    });
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  });
+
 
   return (
     <ReactLenis root>
       <div className="text-black">
         <div className="revealer fixed top-0 left-0 w-screen h-screen origin-top bg-black pointer-events-none z-100"></div>
-        <div className="p-4 sm:p-6">
+        <div className="bg-black text-white p-4 sm:p-6">
           <Navbar />
         </div>
-        
-        {/* Hero Section */}
-        <div className="px-6 md:px-8 mt-20 md:mt-32">
-          <div className="flex flex-col sm:flex-row justify-between items-start mb-24 md:mb-32 gap-6 sm:gap-0">
-            <h1 className="text-6xl sm:text-7xl md:text-9xl xl:text-[200px] font-bold leading-none tracking-tight">
-              Club
-            </h1>
-            <div className="flex items-start gap-3">
-              <span className="text-6xl sm:text-7xl md:text-9xl xl:text-[200px] font-bold leading-none tracking-tight">
-                2025
-              </span>
-              <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 xl:w-32 xl:h-32 border-[3px] sm:border-4 md:border-[5px] xl:border-[6px] border-black rounded-full mt-1 sm:mt-2 md:mt-3 xl:mt-6 flex-shrink-0">
-                <span className="text-2xl sm:text-3xl md:text-5xl xl:text-6xl font-bold">©</span>
-              </div>
-            </div>
-          </div>
 
-          {/* About Section */}
-          <div className="grid md:grid-cols-2 gap-16 md:gap-32 mb-20">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-8">About us</h2>
-            </div>
-            <div>
-              <p className="text-xl md:text-2xl font-medium leading-relaxed">
-                What makes us unique is not our debate skills, speech abilities, 
-                or even our communication techniques. It's our team members that 
-                truly make UESC one of the best clubs around. We've been a student 
-                organization and have been through a lot together since the start. 
-                We understand the importance of genuine human connections.
-              </p>
-            </div>
-          </div>
+        <section className="w-full h-full bg-black flex justify-center items-center overflow-hidden">
+          <Copy delay={2}>
+          <h1 className="text-[490px] text-white font-bold">UESC</h1>
+          </Copy>
+        </section>
 
-          {/* Image Placeholder */}
-          <div className="w-full h-96 bg-gray-400 rounded-lg mb-20">
-            {/* This would be your actual image */}
-          </div>
 
-          {/* Activities Section */}
-          <div className="py-20">
-            <h2 className="text-5xl md:text-7xl font-bold mb-12 text-center">Our Activities</h2>
-            <p className="text-lg md:text-xl text-center mb-16 max-w-3xl mx-auto leading-relaxed">
-              UESC offers a variety of activities designed to improve your English skills 
-              in a fun and supportive environment. Explore our divisions and find the one 
-              that's right for you!
-            </p>
-          </div>
+    <section className="relative w-full h-screen bg-black text-white flex flex-col">
+      {/* Top Left Subtitle */}
+      <div className="about-subtitle absolute top-32 left-10 m-2 text-xl md:text-2xl lg:text-3xl 2xl:text-4xl tracking-widest md:tracking-[0.5rem] lg:tracking-[1rem] 2xl:tracking-[1.5rem] font-bold">
+   
+      </div>
+
+      {/* Main Content (Centered) */}
+        <div className="flex flex-1 items-center justify-center p-4 sm:p-6">
+          <p 
+            ref={mainTextRef}
+            className="about-main text-2xl md:text-4xl lg:text-4xl 2xl:text-6xl font-semibold leading-relaxed max-w-9xl text-indent-8"
+          >
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;At UESC, we are more than just a club we are a community. We are dedicated to fostering English language skills through engaging activities like debate, speech, and scrabble. Our goal is to empower students to communicate with confidence and clarity.
+          </p>
         </div>
+
+    </section>
+        
       </div>
 
       <Footer/>

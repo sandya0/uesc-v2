@@ -81,11 +81,11 @@ const Slogan = () => {
 
       {/* Slogan Text - Centered */}
       <div className="flex-1 flex flex-col justify-center items-center px-6 sm:px-12 lg:px-16">
-        <h2 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-extrabold uppercase tracking-wide leading-tight text-center sm:text-left w-full">
+        <h2 className="text-4xl sm:text-6xl lg:text-7xl 2xl:text-8xl font-extrabold uppercase tracking-wide leading-tight text-center sm:text-left w-full">
           {renderSlotWords("Empowering Voices")}
         </h2>
 
-        <h2 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-extrabold uppercase tracking-wide leading-tight mt-2 sm:mt-4 text-center sm:text-right w-full">
+        <h2 className="text-4xl sm:text-6xl lg:text-7xl 2xl:text-8xl font-extrabold uppercase tracking-wide leading-tight mt-2 sm:mt-4 text-center sm:text-right w-full">
           {renderSlotWords("Building Confidence")}
         </h2>
       </div>
