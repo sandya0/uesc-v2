@@ -91,9 +91,9 @@ const Navbar = () => {
         </Link>
         <Link
           href="/"
-          onClick={(e) => handdleNavigation(e, "/")}
+          onClick={(e) => handdleNavigation(e, "/gallery")}
         >
-          Home
+          Gallery
         </Link>
         <Link
           href="/"

@@ -197,11 +197,13 @@ const ActivityPage = () => {
           <Navbar />
         </div>
 
-        <section className="w-full h-full bg-black flex justify-center items-center overflow-hidden">
-          <Copy delay={2}>
-          <h1 className="text-[490px] text-white font-bold">UESC</h1>
-          </Copy>
+        <section className="w-full h-screen bg-black flex justify-center items-center overflow-hidden">
+          <h1 className="text-white font-bold whitespace-nowrap leading-none"
+              style={{ fontSize: '40vw', lineHeight: 1 }}>
+            UESC
+          </h1>
         </section>
+
 
 
     <section className="relative w-full h-screen bg-black text-white flex flex-col">
