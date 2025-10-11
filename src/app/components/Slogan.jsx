@@ -69,7 +69,7 @@ const Slogan = () => {
   return (
     <section
       ref={sectionRef}
-      className="h-screen w-full bg-gray-100 text-black flex flex-col justify-between overflow-hidden"
+      className="h-screen w-full bg-white text-black flex flex-col justify-between overflow-hidden"
     >
       {/* Top Marquee
       <div className="">

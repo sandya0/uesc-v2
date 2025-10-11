@@ -1,0 +1,98 @@
+/* Overlay active state */
+.overlay.active {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+/* Item styles */
+.item {
+  position: absolute;
+  width: 120px;
+  height: 160px;
+  overflow: hidden;
+  background-color: #1a1a1a;
+  cursor: pointer;
+}
+
+/* Expanded item styles */
+.expanded-item {
+  position: fixed;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Image styles */
+.item img,
+.expanded-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* Project title container */
+.projectTitle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Project title text */
+.projectTitle p {
+  position: relative;
+  height: 42px;
+  color: white;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Project title words (for split-type animation) */
+.projectTitle p .word {
+  position: relative;
+  display: inline-block;
+  font-size: 36px;
+  letter-spacing: -0.02rem;
+  margin-right: 0.1em;
+  transform: translateY(0%);
+  will-change: transform;
+}
+
+/* Additional base styles for container and canvas */
+.container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  cursor: grab;
+}
+
+.container.grabbing {
+  cursor: grabbing;
+}
+
+.canvas {
+  position: absolute;
+  will-change: transform;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+  z-index: 2;
+}

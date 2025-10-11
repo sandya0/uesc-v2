@@ -17,11 +17,17 @@ html {
 }
 
 body{
-  background-color: #f5f5f5;
+  background-color: #efefef;
 }
 
 html, body {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 
 ::view-transition-old(root),
@@ -47,4 +53,14 @@ html, body {
 ::view-transition-old(root) {
   z-index: 1;
   animation: none !important;
+}
+
+.horizontal-container {
+  overflow-x: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+.horizontal-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
