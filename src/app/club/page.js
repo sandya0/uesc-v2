@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense } from 'react';
+import React from 'react';
 import { ReactLenis } from 'lenis/react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -37,8 +37,8 @@ const ClubPage = () => {
             <div>
               <p className="text-xl md:text-2xl font-medium leading-relaxed">
                 What makes us unique is not our debate skills, speech abilities, 
-                or even our communication techniques. It's our team members that 
-                truly make UESC one of the best clubs around. We've been a student 
+                or even our communication techniques. It&apos;s our team members that 
+                truly make UESC one of the best clubs around. We&apos;ve been a student 
                 organization and have been through a lot together since the start. 
                 We understand the importance of genuine human connections.
               </p>
@@ -56,7 +56,7 @@ const ClubPage = () => {
             <p className="text-lg md:text-xl text-center mb-16 max-w-3xl mx-auto leading-relaxed">
               UESC offers a variety of activities designed to improve your English skills 
               in a fun and supportive environment. Explore our divisions and find the one 
-              that's right for you!
+              that&apos;s right for you!
             </p>
           </div>
         </div>
