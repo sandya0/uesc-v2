@@ -84,22 +84,22 @@ const Navbar = () => {
         </a>
       <div className="hidden md:flex flex-1 text-lg md:text-xl xl:text-2xl justify-center gap-x-8">
         <Link
-          href="/activity"
-          onClick={(e) => handdleNavigation(e, "/activity")}
+          href="/whatwedo"
+          onClick={(e) => handdleNavigation(e, "/whatwedo")}
         >
           What We Do
+        </Link>
+        <Link
+          href="/"
+          onClick={(e) => handdleNavigation(e, "/activity")}
+        >
+          Activity
         </Link>
         <Link
           href="/"
           onClick={(e) => handdleNavigation(e, "/gallery")}
         >
           Gallery
-        </Link>
-        <Link
-          href="/"
-          onClick={(e) => handdleNavigation(e, "/club")}
-        >
-          Club
         </Link>
       </div>
       <div className="flex gap-4 sm:gap-6 text-lg md:text-xl xl:text-2xl">

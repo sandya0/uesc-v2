@@ -20,6 +20,7 @@ const Gallery = () => {
     const canvasRef = useRef(null);
     const overlayRef = useRef(null);
     const projectTitleRef = useRef(null);
+    const navbarRef = useRef(null);
     
     const stateRef = useRef({
         itemCount: 20,
@@ -191,8 +192,12 @@ const Gallery = () => {
             };
 
             overlay.classList.add("active");
+            if (navbarRef.current) {
+                navbarRef.current.classList.remove("bg-white");
+                navbarRef.current.classList.add("bg-black");
+            }
 
-            state.expandedItem = document.createElement("div");
+            state.expandedItem = document.createElement("div"); 
             state.expandedItem.className = "expanded-item";
             state.expandedItem.style.width = `${state.itemWidth}px`;
             state.expandedItem.style.height = `${state.itemHeight}px`;
@@ -243,6 +248,10 @@ const Gallery = () => {
 
             animateTitleOut();
             overlay.classList.remove("active");
+            if (navbarRef.current) {
+                navbarRef.current.classList.remove("bg-black");
+                navbarRef.current.classList.add("bg-white");
+            }
             const originalRect = state.originalPosition.rect;
 
             document.querySelectorAll(".item").forEach((el) => {
@@ -438,7 +447,7 @@ const Gallery = () => {
     return (
         <div className="w-screen h-screen overflow-hidden">
             <div className="revealer fixed top-0 left-0 w-screen h-screen origin-top bg-black pointer-events-none z-100"></div>
-            <div className="bg-white text-black p-4 sm:p-6 absolute top-0 left-0 w-full z-10">
+            <div ref={navbarRef} className="bg-white text-black p-4 sm:p-6 absolute top-0 left-0 w-full z-10">
                 <Navbar />
             </div>
 
