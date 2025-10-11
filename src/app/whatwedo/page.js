@@ -1,13 +1,13 @@
 "use client";
 import React, { useRef } from "react";
-import { ReactLenis } from "lenis/react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import { useRevealer } from "../components/template/useRevealer";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/all";
 import { useGSAP } from "@gsap/react";
+import { ReactLenis } from "lenis/react";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import ScrollDemo from "../components/ScrollDemo";
+import { useRevealer } from "../components/template/useRevealer";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -30,11 +30,6 @@ const ActivityPage = () => {
       span.textContent = char;
       span.style.color = "#1a1a1a";
       span.style.display = "inline";
-      span.style.fontFamily = "inherit";
-      span.style.fontSize = "inherit";
-      span.style.fontWeight = "inherit";
-      span.style.lineHeight = "inherit";
-      span.style.letterSpacing = "inherit";
       span.classList.add(`char-${index}`);
       mainText.appendChild(span);
     });
@@ -42,23 +37,21 @@ const ActivityPage = () => {
     const chars = mainText.querySelectorAll("span");
     const subtitle = document.querySelector(".about-subtitle");
     const subtitleText = "DEBATE &nbsp; AND &nbsp; SPEECH";
-
     const subtitle2 = document.querySelector(".about-subtitle2");
     const subtitleText2 = "SCRABBLE &nbsp; AND &nbsp; MUN";
 
-    subtitle.innerHTML = `
-      <div class="subtitle-container relative overflow-hidden h-full">
-        <div class="subtitle-original">${subtitleText}</div>
-        <div class="subtitle-duplicate absolute top-0 left-0">${subtitleText}</div>
-      </div>
-    `;
-
-    subtitle2.innerHTML = `
-      <div class="subtitle-container relative overflow-hidden h-full">
-        <div class="subtitle-original">${subtitleText2}</div>
-        <div class="subtitle-duplicate absolute top-0 left-0">${subtitleText2}</div>
-      </div>
-    `;
+    // subtitle.innerHTML = `
+    //   <div class="subtitle-container relative overflow-hidden h-full">
+    //     <div class="subtitle-original">${subtitleText}</div>
+    //     <div class="subtitle-duplicate absolute top-0 left-0">${subtitleText}</div>
+    //   </div>
+    // `;
+    // subtitle2.innerHTML = `
+    //   <div class="subtitle-container relative overflow-hidden h-full">
+    //     <div class="subtitle-original">${subtitleText2}</div>
+    //     <div class="subtitle-duplicate absolute top-0 left-0">${subtitleText2}</div>
+    //   </div>
+    // `;
 
     let lastScrollY = window.scrollY;
     let scrollDistance = 0;
@@ -73,30 +66,17 @@ const ActivityPage = () => {
       if (scrollDistance >= triggerDistance && !isAnimating) {
         isAnimating = true;
         scrollDistance = 0;
-
         const scrollingDown = currentScrollY > lastScrollY;
-        const tl = gsap.timeline({
-          onComplete: () => (isAnimating = false),
-        });
+        const tl = gsap.timeline({ onComplete: () => (isAnimating = false) });
 
         if (scrollingDown) {
           tl.to(".subtitle-original", { y: "-100%", duration: 0.6, ease: "power3.out" })
-            .fromTo(
-              ".subtitle-duplicate",
-              { y: "100%" },
-              { y: "0%", duration: 0.6, ease: "power3.out" },
-              0
-            )
+            .fromTo(".subtitle-duplicate", { y: "100%" }, { y: "0%", duration: 0.6, ease: "power3.out" }, 0)
             .set(".subtitle-original", { y: "0%" })
             .set(".subtitle-duplicate", { y: "100%" });
         } else {
           tl.to(".subtitle-original", { y: "100%", duration: 0.6, ease: "power3.out" })
-            .fromTo(
-              ".subtitle-duplicate",
-              { y: "-100%" },
-              { y: "0%", duration: 0.6, ease: "power3.out" },
-              0
-            )
+            .fromTo(".subtitle-duplicate", { y: "-100%" }, { y: "0%", duration: 0.6, ease: "power3.out" }, 0)
             .set(".subtitle-original", { y: "0%" })
             .set(".subtitle-duplicate", { y: "100%" });
         }
@@ -120,7 +100,6 @@ const ActivityPage = () => {
           start: "top 75%",
           end: "bottom 25%",
           scrub: 1,
-          toggleActions: "play none none reverse",
         },
       }
     );
@@ -134,7 +113,6 @@ const ActivityPage = () => {
         trigger: ".about-main",
         start: "top 75%",
         end: "bottom 25%",
-        toggleActions: "play none none reverse",
       },
     });
 
@@ -147,7 +125,6 @@ const ActivityPage = () => {
         trigger: ".about-quote",
         start: "top 95%",
         end: "bottom 5%",
-        toggleActions: "play none none none",
       },
     });
 
@@ -185,24 +162,21 @@ const ActivityPage = () => {
 
         {/* MAIN CONTENT */}
         <section className="relative w-full h-screen bg-white flex flex-col">
-          <div>
+          {/* <div>
             <div className="about-subtitle p-4 sm:p-6" />
             <div className="about-subtitle2 p-4 sm:p-6" />
-          </div>
+          </div> */}
           <div className="flex flex-1 items-center justify-center p-4 sm:p-6">
             <p
               ref={mainTextRef}
               className="about-main text-2xl md:text-4xl lg:text-4xl 2xl:text-6xl font-semibold leading-relaxed max-w-9xl text-indent-8"
             >
-              &nbsp;&nbsp;&nbsp;&nbsp;At UESC, we are more than just a club — we are a
-              community. We are dedicated to fostering English language skills through
-              engaging activities like debate, speech, and scrabble. Our goal is to empower
-              students to communicate with confidence and clarity.
+              &nbsp;&nbsp;&nbsp;&nbsp;At UESC, we are more than just a club. We are a community that grows together through language. Our activities in Debate, Speech, Scrabble, and Model United Nations help students express ideas with confidence, think critically, and communicate with clarity. We believe that mastering English is not only about speaking fluently but also about connecting meaningfully with others.
             </p>
           </div>
         </section>
-        <ScrollDemo />
 
+        <ScrollDemo />
         <Footer />
       </div>
     </ReactLenis>

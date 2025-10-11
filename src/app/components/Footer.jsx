@@ -3,16 +3,85 @@
 import React from 'react';
 import Link from './template/Link';
 import Image from 'next/image';
+import { useTransitionRouter } from "next-view-transitions";
+import { usePathname } from "next/navigation";
+import { useRef, useEffect } from 'react';
+
 
 const Footer = () => {
   const navLinks = [
-    { name: "Home", href: "#hero" },
-    { name: "Featured", href: "#about-us" },
-    { name: "Debate", href: "#debate-activities" },
-    { name: "Scrabble", href: "#scrabble-activities" },
-    { name: "MUN", href: "#MUN-activities" },
-    { name: "Speech", href: "#Speech-activities" },
+    { name: "Home", href: "" },
+    { name: "What We Do", href: "whatwedo" },
+    { name: "Activity", href: "#activity" },
+    { name: "Gallery", href: "#Gallery-activities" },
+
   ];
+
+  const router = useTransitionRouter();
+  const pathname = usePathname();
+  const instagramLinkRef = useRef(null);
+
+  useEffect(() => {
+    const wrapper = instagramLinkRef.current;
+    if (!wrapper) return;
+
+    const innerWrapper = wrapper.querySelector(".inner-wrapper");
+
+    const handleEnter = () => {
+      gsap.to(innerWrapper, {
+        y: "-100%",
+        duration: 0.3,
+        ease: "power2.inOut",
+      });
+    };
+
+    const handleLeave = () => {
+      gsap.to(innerWrapper, {
+        y: "0%",
+        duration: 0.3,
+        ease: "power2.inOut",
+      });
+    };
+
+    wrapper.addEventListener("mouseenter", handleEnter);
+    wrapper.addEventListener("mouseleave", handleLeave);
+
+    return () => {
+      wrapper.removeEventListener("mouseenter", handleEnter);
+      wrapper.removeEventListener("mouseleave", handleLeave);
+    };
+  }, []);
+
+  function triggerPageTransition(path) {
+    // Animate the whole <html> element
+    const animation = document.documentElement.animate([
+      {
+      clipPath: "polygon(25% 75%, 75% 75%, 75% 75%, 25% 75%)",
+    },
+     {
+      clipPath: "polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)",
+    }],
+      {
+        duration: 2000,
+        easing: "cubic-bezier(0.9, 0, 0.1, 1)",
+        pseudoElement: "::view-transition-new(root)",
+      }
+    );
+
+    animation.finished.then(() => router.push(path));
+  }
+
+  const handdleNavigation = (e, path) => {
+    e.preventDefault();
+    if (path === pathname) {
+      return;
+    }
+
+    router.push(path, {
+      onTransitionReady: triggerPageTransition,
+    });
+  };
+
 
   return (
     <footer className="text-black font-sans min-h-screen flex flex-col py-16 px-6 sm:px-8 lg:px-16">
@@ -38,13 +107,16 @@ const Footer = () => {
             <ul className="space-y-2 sm:space-y-3">
               {navLinks.map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold">
+                  <Link onClick={(e) => handdleNavigation(e, `/${link.href}`)} className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold">
                     {link.name}
                   </Link>
                 </li>
+                
+
               ))}
             </ul>
           </div>
+
 
           {/* Right Section: Contact Info */}
           <div className="lg:col-span-1 text-left text-lg md:text-xl lg:text-2xl xl:text-3xl">
@@ -54,7 +126,7 @@ const Footer = () => {
                 Universitas Multimedia Nusantara Jl. Boulevard Raya, Gading Serpong, Tangerang, Banten – Indonesia
               </p>
               <div className="mt-6">
-                <a href="mailto:uesc@umn.ac.id" className="block hover:underline">uesc@umn.ac.id</a>
+                {/* <a href="mailto:uesc@umn.ac.id" className="block hover:underline">uesc@umn.ac.id</a> */}
                 <Link href="https://www.instagram.com/uesc_umn" target="_blank" rel="noopener noreferrer" className="block hover:underline">
                   @uesc_umn
                 </Link>
