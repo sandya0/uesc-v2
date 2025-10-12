@@ -107,7 +107,7 @@ const Footer = () => {
             <ul className="space-y-2 sm:space-y-3">
               {navLinks.map((link) => (
                 <li key={link.name}>
-                  <Link onClick={(e) => handdleNavigation(e, `/${link.href}`)} className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold">
+                  <Link lineHeight="1.2" onClick={(e) => handdleNavigation(e, `/${link.href}`)} className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl h-[1.1em] font-bold">
                     {link.name}
                   </Link>
                 </li>

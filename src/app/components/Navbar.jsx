@@ -130,11 +130,11 @@ const Navbar = () => {
       </div>
 
       {/* Desktop Navbar */}
-      <div className="hidden md:flex justify-between items-center text-4xl sm:text-4xl md:text-5xl xl:text-6xl font-bold uppercase">
+      <div className="flex justify-between items-center text-4xl sm:text-4xl md:text-5xl xl:text-6xl font-bold uppercase">
         <a href="/" onClick={(e) => handdleNavigation(e, "/")}>
           UESC
         </a>
-        <div className="flex flex-1 justify-center gap-x-8 text-lg md:text-xl xl:text-2xl">
+        <div className="hidden md:flex  flex-1 justify-center gap-x-8 text-lg md:text-xl xl:text-2xl">
           {[
             { name: "What We Do", path: "/whatwedo" },
             { name: "Activity", path: "/activity" },
@@ -149,7 +149,7 @@ const Navbar = () => {
             </Link>
           ))}
         </div>
-        <div className="flex gap-4 sm:gap-6 text-lg md:text-xl xl:text-2xl">
+        <div className="hidden md:flex  gap-4 sm:gap-6 text-lg md:text-xl xl:text-2xl">
           <a
             href="https://www.instagram.com/uesc_umn/"
             target="_blank"

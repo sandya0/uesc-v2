@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 
-const Link = ({ href, children, className = "", onClick, target, rel }) => {
+const Link = ({ href, children, className = "", onClick, target, rel, lineHeight }) => {
   const wrapperRef = useRef(null);
 
   useEffect(() => {
@@ -44,8 +44,8 @@ const Link = ({ href, children, className = "", onClick, target, rel }) => {
         className="slot-link relative overflow-hidden block cursor-pointer"
       >
         <span className="inner-wrapper block relative">
-          <span className="inner-text block">{children}</span>
-          <span className="inner-text block absolute top-full">{children}</span>
+          <span className="inner-text block" style={{ lineHeight }}>{children}</span>
+          <span className="inner-text block absolute top-full" style={{ lineHeight }}>{children}</span>
         </span>
       </span>
     </a>
