@@ -136,7 +136,7 @@ const Gallery = () => {
 
                     const itemNum = (Math.abs(row * state.columns + col) % state.itemCount) + 1;
                     const img = document.createElement("img");
-                    img.src = `/img${itemNum}.jpg`;
+                    img.src = `/img${itemNum}.webp`;
                     img.alt = `Image ${itemNum}`;
                     item.appendChild(img);
 
@@ -175,7 +175,7 @@ const Gallery = () => {
             container.style.cursor = "auto";
 
             const imgSrc = item.querySelector("img").src;
-            const imgMatch = imgSrc.match(/\/img(\d+)\.jpg/);
+            const imgMatch = imgSrc.match(/\/img(\d+)\.webp/);
             const imgNum = imgMatch ? parseInt(imgMatch[1]) : 1;
             const titleIndex = (imgNum - 1) % items.length;
 

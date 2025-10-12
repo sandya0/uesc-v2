@@ -27,12 +27,6 @@
   position: relative;
 }
 
-/* Images inside gallery items */
-.gallery__item img {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-}
 
 /* Bento layout */
 .gallery--bento {
@@ -82,6 +76,13 @@
 
 .gallery--bento .gallery__item:nth-child(8) {
   grid-area: 4/2/5/3;
+}
+
+/* Images inside gallery items */
+.gallery__item img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 
 @media (max-width: 1024px) {
