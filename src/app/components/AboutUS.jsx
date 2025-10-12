@@ -21,7 +21,7 @@ const AboutUs = () => {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-12 lg:gap-24 items-center">
           {/* Image */}
           <div 
-            className="w-full h-[400px] relative cursor-pointer"
+            className="w-full h-[300px] sm:h-[400px] relative cursor-pointer"
           >
             <Image
               src="/images/aboutus.webp"

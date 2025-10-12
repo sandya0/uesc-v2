@@ -12,7 +12,7 @@ const JoinUs = () => {
       <div className="container mx-auto grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-12 items-center">
         {/* Image Content - Now on the left for desktop */}
         <div 
-          className="w-full h-[500px] relative cursor-pointer"
+          className="w-full h-[300px] sm:h-[500px] relative cursor-pointer"
         >
           <Image
             src="/images/join.webp"

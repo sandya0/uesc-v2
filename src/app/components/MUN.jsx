@@ -79,7 +79,7 @@ const MUN = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div 
             ref={image1Ref}
-            className="w-full xl:h-[400px] 2xl:h-[500px] relative cursor-pointer"
+            className="w-full h-[300px] xl:h-[400px] 2xl:h-[500px] relative cursor-pointer"
           >
             <Image
               src="/images/mun1.webp"
@@ -90,7 +90,7 @@ const MUN = () => {
           </div>
           <div 
             ref={image2Ref}
-            className="w-full xl:h-[500px] 2xl:h-[600px] relative cursor-pointer"
+            className="w-full h-[300px] xl:h-[500px] 2xl:h-[600px] relative cursor-pointer"
           >
             <Image
               src="/images/mun2.webp"

@@ -91,7 +91,7 @@ const Footer = () => {
           
           {/* Left Section: Image and Logo */}
           <div className="lg:col-span-1">
-            <div className="w-full h-[400px] relative mb-8 overflow-hidden rounded-lg">
+            <div className="w-full h-[300px] sm:h-[400px] relative mb-8 overflow-hidden rounded-lg">
               <Image 
                 src="/images/footer.webp"
                 alt="UESC Event" 

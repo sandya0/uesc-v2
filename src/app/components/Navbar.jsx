@@ -144,7 +144,6 @@ const Navbar = () => {
               key={index}
               href={link.path}
               onClick={(e) => handdleNavigation(e, link.path)}
-              className="transition-colors duration-300 hover:text-white"
             >
               {link.name}
             </Link>
