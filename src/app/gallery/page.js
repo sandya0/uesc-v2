@@ -1,27 +1,77 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
-import { ReactLenis } from 'lenis/react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import Image from 'next/image';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import { useRevealer } from '../components/template/useRevealer';
 import gsap from 'gsap';
 import { CustomEase } from 'gsap/all';
 import SplitType from "split-type";
 import items from '../components/template/items';
-import './gallery.css'
+import './gallery.css';
 
 gsap.registerPlugin(CustomEase);
 CustomEase.create("hop", "0.9, 0, 0.1, 1");
 
+const Item = React.memo(({ id, col, row, state, onClick, isVisible }) => {
+    const itemRef = useRef(null);
+    const itemNum = (Math.abs(row * state.columns + col) % state.itemCount) + 1;
+    const imgSrc = `/img${itemNum}.webp`;
+
+    useEffect(() => {
+        if (itemRef.current) {
+            gsap.set(itemRef.current, {
+                left: `${col * (state.itemWidth + state.itemGap)}px`,
+                top: `${row * (state.itemWidth + state.itemGap)}px`,
+            });
+        }
+    }, [col, row, state.itemWidth, state.itemGap]);
+
+    const handleClick = () => {
+        onClick(itemRef.current);
+    };
+
+    return (
+        <div
+            ref={itemRef}
+            id={id}
+            className="item absolute"
+            data-col={col}
+            data-row={row}
+            onClick={handleClick}
+            style={{ visibility: isVisible ? 'visible' : 'hidden' }}
+        >
+            <Image
+                src={imgSrc}
+                alt={`Image ${itemNum}`}
+                width={state.itemWidth}
+                height={state.itemHeight}
+                quality={80}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                loading="lazy"
+                decoding="async"
+                style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover"
+                }}
+            />
+        </div>
+    );
+});
+Item.displayName = 'Item';
+
+
 const Gallery = () => {
     useRevealer();
-    
+
     const containerRef = useRef(null);
     const canvasRef = useRef(null);
     const overlayRef = useRef(null);
     const projectTitleRef = useRef(null);
     const navbarRef = useRef(null);
-    
+
+    const [visibleItems, setVisibleItems] = useState([]);
+
     const stateRef = useRef({
         itemCount: 20,
         itemGap: 150,
@@ -39,7 +89,6 @@ const Gallery = () => {
         dragVelocityY: 0,
         lastDragTime: 0,
         mouseHasMoved: false,
-        visibleItems: new Set(),
         lastUpdateTime: 0,
         lastX: 0,
         lastY: 0,
@@ -52,36 +101,48 @@ const Gallery = () => {
         titleSplit: null
     });
 
-    useEffect(() => {
-        const container = containerRef.current;
-        const canvas = canvasRef.current;
-        const overlay = overlayRef.current;
-        const projectTitleElement = projectTitleRef.current;
+    const updateVisibleItems = useCallback(() => {
         const state = stateRef.current;
+        const buffer = 1.0;
+        const viewWidth = window.innerWidth * (1 + buffer);
+        const viewHeight = window.innerHeight * (1 + buffer);
+        const movingRight = state.targetX > state.currentX;
+        const movingDown = state.targetY > state.currentY;
+        const directionBufferX = movingRight ? -300 : 300;
+        const directionBufferY = movingDown ? -300 : 300;
 
-        if (!container || !canvas || !overlay || !projectTitleElement) return;
+        const startCol = Math.floor(
+            (-state.currentX - viewWidth / 2 + (movingRight ? directionBufferX : 0)) /
+            (state.itemWidth + state.itemGap)
+        );
+        const endCol = Math.ceil(
+            (-state.currentX + viewWidth * 1.5 + (!movingRight ? directionBufferX : 0)) /
+            (state.itemWidth + state.itemGap)
+        );
+        const startRow = Math.floor(
+            (-state.currentY - viewHeight / 2 + (movingDown ? directionBufferY : 0)) /
+            (state.itemWidth + state.itemGap)
+        );
+        const endRow = Math.ceil(
+            (-state.currentY + viewHeight * 1.5 + (!movingDown ? directionBufferY : 0)) /
+            (state.itemWidth + state.itemGap)
+        );
 
-        function setAndAnimateTitle(title) {
-            if (state.titleSplit) state.titleSplit.revert();
-            projectTitleElement.textContent = title;
-            state.titleSplit = new SplitType(projectTitleElement, {
-                types: "words"
-            });
-            gsap.set(state.titleSplit.words, {
-                y: "100%"
-            });
+        const newVisibleItems = [];
+        for (let row = startRow; row <= endRow; row++) {
+            for (let col = startCol; col <= endCol; col++) {
+                const itemId = `${col},${row}`;
+                newVisibleItems.push({ id: itemId, col, row });
+            }
         }
+        setVisibleItems(newVisibleItems);
+    }, []);
 
-        function animateTitleIn() {
-            gsap.to(state.titleSplit.words, {
-                y: "0%",
-                duration: 1,
-                stagger: 0.1,
-                ease: "power3.out"
-            });
-        }
+    const closeExpandedItem = useCallback(() => {
+        const state = stateRef.current;
+        if (!state.expandedItem || !state.originalPosition) return;
 
-        function animateTitleOut() {
+        if (state.titleSplit) {
             gsap.to(state.titleSplit.words, {
                 y: "-100%",
                 duration: 1,
@@ -90,211 +151,172 @@ const Gallery = () => {
             });
         }
 
-        function updateVisibleItems() {
-            const buffer = 2.5;
-            const viewWidth = window.innerWidth * (1 + buffer);
-            const viewHeight = window.innerHeight * (1 + buffer);
-            const movingRight = state.targetX > state.currentX;
-            const movingDown = state.targetY > state.currentY;
-            const directionBufferX = movingRight ? -300 : 300;
-            const directionBufferY = movingDown ? -300 : 300;
+        overlayRef.current.classList.remove("active");
+        if (navbarRef.current) {
+            navbarRef.current.classList.remove("bg-black");
+            navbarRef.current.classList.add("bg-white");
+        }
+        const originalRect = state.originalPosition.rect;
 
-            const startCol = Math.floor(
-                (-state.currentX - viewWidth / 2 + (movingRight ? directionBufferX : 0)) /
-                (state.itemWidth + state.itemGap)
-            );
-            const endCol = Math.ceil(
-                (-state.currentX + viewWidth * 1.5 + (!movingRight ? directionBufferX : 0)) /
-                (state.itemWidth + state.itemGap)
-            );
-            const startRow = Math.floor(
-                (-state.currentY - viewHeight / 2 + (movingDown ? directionBufferY : 0)) /
-                (state.itemWidth + state.itemGap)
-            );
-            const endRow = Math.ceil(
-                (-state.currentY + viewHeight * 1.5 + (!movingDown ? directionBufferY : 0)) /
-                (state.itemWidth + state.itemGap)
-            );
-
-            const currentItems = new Set();
-
-            for (let row = startRow; row <= endRow; row++) {
-                for (let col = startCol; col <= endCol; col++) {
-                    const itemId = `${col},${row}`;
-                    currentItems.add(itemId);
-
-                    if (state.visibleItems.has(itemId)) continue;
-                    if (state.activeItemId == itemId && state.isExpanded) continue;
-
-                    const item = document.createElement("div");
-                    item.className = "item";
-                    item.id = itemId;
-                    item.style.left = `${col * (state.itemWidth + state.itemGap)}px`;
-                    item.style.top = `${row * (state.itemWidth + state.itemGap)}px`;
-                    item.dataset.col = col;
-                    item.dataset.row = row;
-
-                    const itemNum = (Math.abs(row * state.columns + col) % state.itemCount) + 1;
-                    const img = document.createElement("img");
-                    img.src = `/img${itemNum}.webp`;
-                    img.alt = `Image ${itemNum}`;
-                    item.appendChild(img);
-
-                    item.addEventListener("click", (e) => {
-                        if (state.mouseHasMoved || state.isDragging) return;
-                        handleItemClick(item);
-                    });
-
-                    canvas.appendChild(item);
-                    state.visibleItems.add(itemId);
-                }
+        document.querySelectorAll(".item").forEach((el) => {
+            if (el.id !== state.activeItemId) {
+                gsap.to(el, {
+                    opacity: 1,
+                    duration: 0.5,
+                    delay: 0.5,
+                    ease: "power2.out"
+                });
             }
+        });
 
-            state.visibleItems.forEach((itemId) => {
-                if (!currentItems.has(itemId) || (state.activeItemId == itemId && state.isExpanded)) {
-                    const item = document.getElementById(itemId);
-                    if (item) canvas.removeChild(item);
-                    state.visibleItems.delete(itemId);
+        const originalItem = document.getElementById(state.activeItemId);
+
+        gsap.to(state.expandedItem, {
+            width: state.itemWidth,
+            height: state.itemHeight,
+            x: originalRect.left + state.itemWidth / 2 - window.innerWidth / 2,
+            y: originalRect.top + state.itemHeight / 2 - window.innerHeight / 2,
+            duration: 1,
+            ease: "hop",
+            onComplete: () => {
+                if (state.expandedItem && state.expandedItem.parentNode) {
+                    document.body.removeChild(state.expandedItem);
                 }
-            });
+
+                setVisibleItems(prev => {
+                    const newItems = [...prev];
+                    const item = newItems.find(i => i.id === state.activeItemId);
+                    return newItems;
+                });
+
+                if (originalItem) {
+                    originalItem.style.visibility = "visible";
+                }
+
+                state.expandedItem = null;
+                state.isExpanded = false;
+                state.activeItem = null;
+                state.originalPosition = null;
+                state.activeItemId = null;
+                state.canDrag = true;
+                if (containerRef.current) {
+                    containerRef.current.style.cursor = "grab";
+                }
+                state.dragVelocityX = 0;
+                state.dragVelocityY = 0;
+            }
+        });
+    }, []);
+
+    const expandItem = useCallback((item) => {
+        const state = stateRef.current;
+        state.isExpanded = true;
+        state.activeItem = item;
+        state.activeItemId = item.id;
+        state.canDrag = false;
+        if(containerRef.current) {
+            containerRef.current.style.cursor = "auto";
         }
 
-        function handleItemClick(item) {
-            if (state.isExpanded) {
-                if (state.expandedItem) closeExpandedItem();
-            } else {
-                expandItem(item);
-            }
+        const imgSrc = item.querySelector("img").src;
+        const imgMatch = imgSrc.match(/\/img(\d+)\.webp/);
+        const imgNum = imgMatch ? parseInt(imgMatch[1]) : 1;
+        const titleIndex = (imgNum - 1) % items.length;
+
+        if (state.titleSplit) state.titleSplit.revert();
+        projectTitleRef.current.textContent = items[titleIndex];
+        state.titleSplit = new SplitType(projectTitleRef.current, { types: "words" });
+        gsap.set(state.titleSplit.words, { y: "100%" });
+        gsap.to(state.titleSplit.words, {
+            y: "0%",
+            duration: 1,
+            stagger: 0.1,
+            ease: "power3.out"
+        });
+
+        item.style.visibility = "hidden";
+
+        const rect = item.getBoundingClientRect();
+        const targetImg = item.querySelector("img").src;
+
+        state.originalPosition = {
+            id: item.id,
+            rect: rect,
+            imgSrc: targetImg,
+        };
+
+        overlayRef.current.classList.add("active");
+        if (navbarRef.current) {
+            navbarRef.current.classList.remove("bg-white");
+            navbarRef.current.classList.add("bg-black");
         }
 
-        function expandItem(item) {
-            state.isExpanded = true;
-            state.activeItem = item;
-            state.activeItemId = item.id;
-            state.canDrag = false;
-            container.style.cursor = "auto";
+        state.expandedItem = document.createElement("div");
+        state.expandedItem.className = "expanded-item";
+        state.expandedItem.style.width = `${state.itemWidth}px`;
+        state.expandedItem.style.height = `${state.itemHeight}px`;
 
-            const imgSrc = item.querySelector("img").src;
-            const imgMatch = imgSrc.match(/\/img(\d+)\.webp/);
-            const imgNum = imgMatch ? parseInt(imgMatch[1]) : 1;
-            const titleIndex = (imgNum - 1) % items.length;
+        const img = document.createElement("img");
+        img.src = targetImg;
+        img.loading = "eager";
+        img.decoding = "async";
+        img.style.width = "100%";
+        img.style.height = "100%";
+        img.style.objectFit = "cover";
+        state.expandedItem.appendChild(img);
+        state.expandedItem.addEventListener("click", closeExpandedItem);
+        document.body.appendChild(state.expandedItem);
 
-            setAndAnimateTitle(items[titleIndex]);
-            item.style.visibility = "hidden";
-
-            const rect = item.getBoundingClientRect();
-            const targetImg = item.querySelector("img").src;
-
-            state.originalPosition = {
-                id: item.id,
-                rect: rect,
-                imgSrc: targetImg,
-            };
-
-            overlay.classList.add("active");
-            if (navbarRef.current) {
-                navbarRef.current.classList.remove("bg-white");
-                navbarRef.current.classList.add("bg-black");
+        document.querySelectorAll(".item").forEach((el) => {
+            if (el.id !== state.activeItemId) {
+                gsap.to(el, {
+                    opacity: 0,
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
             }
+        });
 
-            state.expandedItem = document.createElement("div"); 
-            state.expandedItem.className = "expanded-item";
-            state.expandedItem.style.width = `${state.itemWidth}px`;
-            state.expandedItem.style.height = `${state.itemHeight}px`;
+        const viewportWidth = window.innerWidth;
+        const targetWidth = viewportWidth * 0.4;
+        const targetHeight = targetWidth * 1.2;
 
-            const img = document.createElement("img");
-            img.src = targetImg;
-            state.expandedItem.appendChild(img);
-            state.expandedItem.addEventListener("click", closeExpandedItem);
-            document.body.appendChild(state.expandedItem);
-
-            document.querySelectorAll(".item").forEach((el) => {
-                if (el != state.activeItem) {
-                    gsap.to(el, {
-                        opacity: 0,
-                        duration: 0.3,
-                        ease: "power2.out"
-                    });
-                }
-            });
-
-            const viewportWidth = window.innerWidth;
-            const targetWidth = viewportWidth * 0.4;
-            const targetHeight = targetWidth * 1.2;
-
-            gsap.delayedCall(0.5, animateTitleIn);
-
-            gsap.fromTo(
-                state.expandedItem,
-                {
-                    width: state.itemWidth,
-                    height: state.itemHeight,
-                    x: rect.left + state.itemWidth / 2 - window.innerWidth / 2,
-                    y: rect.top + state.itemHeight / 2 - window.innerHeight / 2,
-                },
-                {
-                    width: targetWidth,
-                    height: targetHeight,
-                    x: 0,
-                    y: 0,
-                    duration: 1,
-                    ease: "expo.out",
-                }
-            );
-        }
-
-        function closeExpandedItem() {
-            if (!state.expandedItem || !state.originalPosition) return;
-
-            animateTitleOut();
-            overlay.classList.remove("active");
-            if (navbarRef.current) {
-                navbarRef.current.classList.remove("bg-black");
-                navbarRef.current.classList.add("bg-white");
-            }
-            const originalRect = state.originalPosition.rect;
-
-            document.querySelectorAll(".item").forEach((el) => {
-                if (el.id != state.activeItemId) {
-                    gsap.to(el, {
-                        opacity: 1,
-                        duration: 0.5,
-                        delay: 0.5,
-                        ease: "power2.out"
-                    });
-                }
-            });
-
-            const originalItem = document.getElementById(state.activeItemId);
-
-            gsap.to(state.expandedItem, {
+        gsap.fromTo(
+            state.expandedItem,
+            {
                 width: state.itemWidth,
                 height: state.itemHeight,
-                x: originalRect.left + state.itemWidth / 2 - window.innerWidth / 2,
-                y: originalRect.top + state.itemHeight / 2 - window.innerHeight / 2,
+                x: rect.left + state.itemWidth / 2 - window.innerWidth / 2,
+                y: rect.top + state.itemHeight / 2 - window.innerHeight / 2,
+            },
+            {
+                width: targetWidth,
+                height: targetHeight,
+                x: 0,
+                y: 0,
                 duration: 1,
-                ease: "hop",
-                onComplete: () => {
-                    if (state.expandedItem && state.expandedItem.parentNode) {
-                        document.body.removeChild(state.expandedItem);
-                    }
+                ease: "expo.out",
+            }
+        );
+    }, [closeExpandedItem]);
 
-                    if (originalItem) {
-                        originalItem.style.visibility = "visible";
-                    }
-
-                    state.expandedItem = null;
-                    state.isExpanded = false;
-                    state.activeItem = null;
-                    state.originalPosition = null;
-                    state.activeItemId = null;
-                    state.canDrag = true;
-                    container.style.cursor = "grab";
-                    state.dragVelocityX = 0;
-                    state.dragVelocityY = 0;
-                }
-            });
+    const handleItemClick = useCallback((item) => {
+        const state = stateRef.current;
+        if (state.mouseHasMoved || state.isDragging) return;
+        if (state.isExpanded) {
+            if (state.expandedItem) closeExpandedItem();
+        } else {
+            expandItem(item);
         }
+    }, [closeExpandedItem, expandItem]);
+
+    useEffect(() => {
+        const container = containerRef.current;
+        const canvas = canvasRef.current;
+        const overlay = overlayRef.current;
+        const state = stateRef.current;
+
+        let animationFrameId;
 
         function animate() {
             if (state.canDrag) {
@@ -302,7 +324,9 @@ const Gallery = () => {
                 state.currentX += (state.targetX - state.currentX) * ease;
                 state.currentY += (state.targetY - state.currentY) * ease;
 
-                canvas.style.transform = `translate(${state.currentX}px, ${state.currentY}px)`;
+                if (canvas) {
+                    canvas.style.transform = `translate(${state.currentX}px, ${state.currentY}px)`;
+                }
 
                 const now = Date.now();
                 const distMoved = Math.sqrt(
@@ -317,7 +341,7 @@ const Gallery = () => {
                 }
             }
 
-            requestAnimationFrame(animate);
+            animationFrameId = requestAnimationFrame(animate);
         }
 
         const handleMouseDown = (e) => {
@@ -326,7 +350,9 @@ const Gallery = () => {
             state.mouseHasMoved = false;
             state.startX = e.clientX;
             state.startY = e.clientY;
-            container.style.cursor = "grabbing";
+            if (container) {
+                container.style.cursor = "grabbing";
+            }
         };
 
         const handleMouseMove = (e) => {
@@ -358,7 +384,9 @@ const Gallery = () => {
             state.isDragging = false;
 
             if (state.canDrag) {
-                container.style.cursor = "grab";
+                if(container){
+                    container.style.cursor = "grab";
+                }
 
                 if (Math.abs(state.dragVelocityX) > 0.1 || Math.abs(state.dragVelocityY) > 0.1) {
                     const momentumFactor = 200;
@@ -418,31 +446,59 @@ const Gallery = () => {
             }
         };
 
-        container.addEventListener("mousedown", handleMouseDown);
-        window.addEventListener("mousemove", handleMouseMove);
-        window.addEventListener("mouseup", handleMouseUp);
-        overlay.addEventListener("click", handleOverlayClick);
-        container.addEventListener("touchstart", handleTouchStart);
-        window.addEventListener("touchmove", handleTouchMove);
-        window.addEventListener("touchend", handleTouchEnd);
+        if (container) {
+            container.addEventListener("mousedown", handleMouseDown);
+            window.addEventListener("mousemove", handleMouseMove);
+            window.addEventListener("mouseup", handleMouseUp);
+            container.addEventListener("touchstart", handleTouchStart);
+            window.addEventListener("touchmove", handleTouchMove);
+            window.addEventListener("touchend", handleTouchEnd);
+        }
+        if(overlay) {
+            overlay.addEventListener("click", handleOverlayClick);
+        }
         window.addEventListener("resize", handleResize);
 
         updateVisibleItems();
         animate();
 
         return () => {
-            container.removeEventListener("mousedown", handleMouseDown);
-            window.removeEventListener("mousemove", handleMouseMove);
-            window.removeEventListener("mouseup", handleMouseUp);
-            overlay.removeEventListener("click", handleOverlayClick);
-            container.removeEventListener("touchstart", handleTouchStart);
-            window.removeEventListener("touchmove", handleTouchMove);
-            window.removeEventListener("touchend", handleTouchEnd);
+            cancelAnimationFrame(animationFrameId);
+            if (container) {
+                container.removeEventListener("mousedown", handleMouseDown);
+                window.removeEventListener("mousemove", handleMouseMove);
+                window.removeEventListener("mouseup", handleMouseUp);
+                container.removeEventListener("touchstart", handleTouchStart);
+                window.removeEventListener("touchmove", handleTouchMove);
+                window.removeEventListener("touchend", handleTouchEnd);
+            }
+            if(overlay) {
+                overlay.removeEventListener("click", handleOverlayClick);
+            }
             window.removeEventListener("resize", handleResize);
-            
+
             if (state.titleSplit) state.titleSplit.revert();
         };
-    }, []);
+    }, [updateVisibleItems, closeExpandedItem]);
+
+    const preloadImages = () => {
+        const images = [];
+        for (let i = 1; i <= 20; i++) {
+            images.push(
+                <div key={i} className="hidden">
+                    <Image
+                        src={`/img${i}.webp`}
+                        alt={`Preload Image ${i}`}
+                        width={120}
+                        height={160}
+                        priority={i <= 5}
+                        quality={80}
+                    />
+                </div>
+            );
+        }
+        return images;
+    };
 
     return (
         <div className="w-screen h-screen overflow-hidden">
@@ -454,6 +510,15 @@ const Gallery = () => {
             <section className="w-full h-full">
                 <div ref={containerRef} className="gallery-container relative w-full h-full overflow-hidden cursor-grab">
                     <div ref={canvasRef} className="canvas absolute will-change-transform">
+                        {visibleItems.map(item => (
+                            <Item
+                                key={item.id}
+                                {...item}
+                                state={stateRef.current}
+                                onClick={handleItemClick}
+                                isVisible={!stateRef.current.isExpanded || stateRef.current.activeItemId !== item.id}
+                            />
+                        ))}
                     </div>
                     <div ref={overlayRef} className="overlay fixed top-0 left-0 w-full h-full bg-white pointer-events-none transition-opacity duration-300 ease-in-out opacity-0 z-[2]">
                     </div>
@@ -463,6 +528,8 @@ const Gallery = () => {
                     <p ref={projectTitleRef}></p>
                 </div>
             </section>
+
+            {preloadImages()}
         </div>
     );
 };

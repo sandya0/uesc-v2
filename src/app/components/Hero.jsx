@@ -172,7 +172,7 @@ const Hero = () => {
           {centerLinks.map((text, i) => (
             <Link
               key={i}
-              className={`hidden md:flex  relative h-[1.1em] overflow-hidden block cursor-pointer ${
+              className={`hidden md:flex  relative h-[1.1em] overflow-hidden cursor-pointer ${
                 text === "Featured Activities" || text === "Model United Nation"
                   ? "hidden md:block"
                   : ""
