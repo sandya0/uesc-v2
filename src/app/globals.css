@@ -11,20 +11,20 @@
   --color-white: #efefef;
   --font-sans: "Inter", sans-serif;
   --font-modern-negra: "Modern Negra", sans-serif;
+  --font-serif: "DM Serif Text", serif;
 }
 
 html {
   scroll-behavior: smooth;
 }
 
-body {
+body{
   background-color: #efefef;
 }
 
 html, body {
   scroll-behavior: smooth;
   overflow-x: hidden;
-  overflow-y: hidden;
 }
 
 body::-webkit-scrollbar {
@@ -58,10 +58,11 @@ body::-webkit-scrollbar {
 
 .horizontal-container {
   overflow-x: scroll;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
 }
 
 .horizontal-container::-webkit-scrollbar {
-  display: none;
+  display: none; /* Chrome, Safari, Opera */
 }
+
