@@ -29,35 +29,39 @@ const ActivityPage = () => {
 
     galleryElement.classList.remove("gallery--final");
 
-    const ctx = gsap.context(() => {
-      galleryElement.classList.add("gallery--final");
-      const flipState = Flip.getState(galleryItems);
-      galleryElement.classList.remove("gallery--final");
+    const mm = gsap.matchMedia();
 
-      const flip = Flip.to(flipState, {
-        simple: true,
-        ease: "expoScale(1, 5)",
+    mm.add("(min-width: 1024px)", () => {
+      const ctx = gsap.context(() => {
+        galleryElement.classList.add("gallery--final");
+        const flipState = Flip.getState(galleryItems);
+        galleryElement.classList.remove("gallery--final");
+
+        const flip = Flip.to(flipState, {
+          simple: true,
+          ease: "expoScale(1, 5)",
+        });
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: galleryElement,
+            start: "center center",
+            end: "+=100%",
+            scrub: true,
+            pin: galleryElement.parentNode,
+          },
+        });
+
+        tl.add(flip);
       });
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: galleryElement,
-          start: "center center",
-          end: "+=100%",
-          scrub: true,
-          pin: galleryElement.parentNode,
-        },
-      });
-
-      tl.add(flip);
+      // Save context reference
+      if (ctxIndex >= 0) {
+        flipCtxRef.current[ctxIndex] = { galleryId, ctx };
+      } else {
+        flipCtxRef.current.push({ galleryId, ctx });
+      }
     });
-
-    // Save context reference
-    if (ctxIndex >= 0) {
-      flipCtxRef.current[ctxIndex] = { galleryId, ctx };
-    } else {
-      flipCtxRef.current.push({ galleryId, ctx });
-    }
   };
 
   useEffect(() => {
@@ -172,7 +176,7 @@ const ActivityPage = () => {
 
         {/* Right: Paragraph */}
         <div className="md:w-1/2 flex justify-center">
-          <Copy delay={0.9}>
+          <Copy delay={0.3}>
             <p className="text-xl md:text-3xl leading-relaxed font-bold">
               {gallery.description}
             </p>

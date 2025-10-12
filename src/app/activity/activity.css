@@ -83,3 +83,29 @@
 .gallery--bento .gallery__item:nth-child(8) {
   grid-area: 4/2/5/3;
 }
+
+@media (max-width: 1024px) {
+  .gallery--bento {
+    grid-template-columns: repeat(2, 48vw);
+    grid-template-rows: auto;
+    gap: 2vw;
+  }
+
+  .gallery--bento .gallery__item:nth-child(1),
+  .gallery--bento .gallery__item:nth-child(2),
+  .gallery--bento .gallery__item:nth-child(3),
+  .gallery--bento .gallery__item:nth-child(4),
+  .gallery--bento .gallery__item:nth-child(5),
+  .gallery--bento .gallery__item:nth-child(6),
+  .gallery--bento .gallery__item:nth-child(7),
+  .gallery--bento .gallery__item:nth-child(8) {
+    grid-area: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .gallery--bento {
+    grid-template-columns: repeat(1, 98vw);
+    gap: 2vw;
+  }
+}
