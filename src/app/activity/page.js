@@ -141,7 +141,7 @@ const ActivityPage = () => {
             </div>
             <div>
               <Copy delay={0.5}>
-              <p className="text-xl md:text-2xl leading-relaxed font-bold">
+              <p className="text-xl lg:text-2xl 2xl:text-3xl leading-relaxed font-bold">
                 UESC hosts a variety of activities throughout the year to help
                 members develop their English skills, teamwork, and confidence.
                 From debate competitions to workshops and bonding events, every
