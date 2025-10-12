@@ -72,7 +72,7 @@ export default function HorizontalScroll() {
               </div>
             </div>
           </div>
-          <div className="mt-8 lg:absolute lg:right-20 lg:bottom-24 text-center lg:text-right">
+          <div className="mt-8 lg:absolute lg:right-10 lg:bottom-12 text-center lg:text-right">
             <p className="text-gray-400 uppercase text-xs lg:text-sm mb-2">Focus</p>
             <p className="font-semibold text-lg lg:text-xl leading-tight mb-4 lg:mb-6">
               Public speaking<br />Confident expression
@@ -92,7 +92,7 @@ export default function HorizontalScroll() {
 
         {/* Speech Explanation Panel */}
         <section className="horizontal-panel bg-black min-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center p-6 sm:p-12 lg:pt-24 lg:px-24">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-8 lg:mb-12 text-left w-full md:w-5/6 lg:w-3/4">
+          <h1 className="text-4xl md:text-5xl lg:text-5xl 2xl:text-6xl font-extrabold mb-8 lg:mb-10 2xl:mb-12 text-left w-full">
             UESC Speech nurtures confident speakers who can inspire, persuade, and express themselves effectively
           </h1>
           <div className="flex flex-wrap lg:flex-nowrap items-center lg:items-end gap-8 md:gap-12 lg:gap-20 w-full">
@@ -104,10 +104,10 @@ export default function HorizontalScroll() {
               />
             </div>
             <div className="w-full lg:w-1/2 flex flex-col justify-center lg:justify-start">
-              <p className="text-lg 2xl:text-xl text-gray-300 leading-relaxed max-w-3xl mb-6 lg:mb-8">
+              <p className="text-base 2xl:text-xl text-gray-300 leading-relaxed max-w-3xl mb-6 lg:mb-8">
                 Many members initially find public speaking intimidating. At UESC Speech, members are guided through structured exercises and hands-on workshops to overcome stage fright, build self-confidence, and refine their communication skills. Members learn how to organize ideas clearly, adapt their delivery to different audiences, and harness their unique voice to make a lasting impression.
               </p>
-              <p className="text-lg 2xl:text-xl text-gray-300 leading-relaxed max-w-3xl">
+              <p className="text-base 2xl:text-xl text-gray-300 leading-relaxed max-w-3xl">
                 Beyond technical skills, Speech also fosters creativity and critical thinking. Members explore storytelling techniques, persuasive strategies, and the art of emotional engagement. Through competitions and peer coaching, they receive constructive feedback and learn to continuously improve, which positively impacts their academic, social, and professional life.
               </p>
             </div>
@@ -138,7 +138,7 @@ export default function HorizontalScroll() {
               </div>
             </div>
           </div>
-          <div className="mt-8 lg:absolute lg:right-20 lg:bottom-24 text-center lg:text-right">
+          <div className="mt-8 lg:absolute lg:right-10 lg:bottom-12 text-center lg:text-right">
             <p className="text-gray-400 uppercase text-xs lg:text-sm mb-2">Focus</p>
             <p className="font-semibold text-lg lg:text-xl leading-tight mb-4 lg:mb-6">
               Logical thinking<br />Persuasive skills
@@ -158,7 +158,7 @@ export default function HorizontalScroll() {
 
         {/* Debate Explanation Panel */}
         <section className="horizontal-panel bg-black min-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center p-6 sm:p-12 lg:pt-24 lg:px-24">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-8 lg:mb-12 text-left w-full md:w-5/6 lg:w-3/4">
+          <h1 className="text-4xl md:text-5xl lg:text-5xl 2xl:text-6xl font-extrabold mb-8 lg:mb-10 2xl:mb-12 text-left w-full">
             UESC Debate develops critical thinkers who can analyze, articulate, and persuade with confidence
           </h1>
           <div className="flex flex-wrap lg:flex-nowrap items-center lg:items-end gap-8 md:gap-12 lg:gap-20 w-full">
@@ -170,10 +170,10 @@ export default function HorizontalScroll() {
               />
             </div>
             <div className="w-full lg:w-1/2 flex flex-col justify-center lg:justify-start">
-              <p className="text-lg 2xl:text-xl text-gray-300 leading-relaxed max-w-3xl mb-6 lg:mb-8">
+              <p className="text-base 2xl:text-xl text-gray-300 leading-relaxed max-w-3xl mb-6 lg:mb-8">
                 UESC Debate empowers members to examine complex issues critically, construct coherent arguments, and communicate ideas persuasively. Through training sessions, practice debates, and tournaments, members learn how to research thoroughly, identify logical fallacies, and present arguments in a compelling manner. Each session challenges members to think strategically and respond dynamically to opposing viewpoints.
               </p>
-              <p className="text-lg 2xl:text-xl text-gray-300 leading-relaxed max-w-3xl">
+              <p className="text-base 2xl:text-xl text-gray-300 leading-relaxed max-w-3xl">
                 The skills acquired in Debate extend beyond competitions. Members apply critical thinking and persuasive communication to academic projects, community engagement, and professional settings. The division cultivates intellectually agile individuals who can articulate ideas clearly, influence effectively, and approach challenges with strategic insight.
               </p>
             </div>
@@ -204,7 +204,7 @@ export default function HorizontalScroll() {
               </div>
             </div>
           </div>
-          <div className="mt-8 lg:absolute lg:right-20 lg:bottom-24 text-center lg:text-right">
+          <div className="mt-8 lg:absolute lg:right-10 lg:bottom-12 text-center lg:text-right">
             <p className="text-gray-400 uppercase text-xs lg:text-sm mb-2">Focus</p>
             <p className="font-semibold text-lg lg:text-xl leading-tight mb-4 lg:mb-6">
               Vocabulary<br />Strategy development
@@ -224,7 +224,7 @@ export default function HorizontalScroll() {
 
         {/* Scrabble Explanation Panel */}
         <section className="horizontal-panel bg-black min-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center p-6 sm:p-12 lg:pt-24 lg:px-24">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-8 lg:mb-12 text-left w-full md:w-5/6 lg:w-3/4">
+          <h1 className="text-4xl md:text-5xl lg:text-5xl 2xl:text-6xl font-extrabold mb-8 lg:mb-10 2xl:mb-12 text-left w-full">
             UESC Scrabble transforms language learning into strategic thinking and problem-solving
           </h1>
           <div className="flex flex-wrap lg:flex-nowrap items-center lg:items-end gap-8 md:gap-12 lg:gap-20 w-full">
@@ -236,10 +236,10 @@ export default function HorizontalScroll() {
               />
             </div>
             <div className="w-full lg:w-1/2 flex flex-col justify-center lg:justify-start">
-              <p className="text-lg 2xl:text-xl text-gray-300 leading-relaxed max-w-3xl mb-6 lg:mb-8">
+              <p className="text-base 2xl:text-xl text-gray-300 leading-relaxed max-w-3xl mb-6 lg:mb-8">
                 Scrabble at UESC is more than a game; it is a platform for expanding vocabulary, enhancing strategic thinking, and sharpening problem-solving skills. Members learn to recognize patterns, identify high-value plays, and anticipate opponents’ moves. Each game is a mental exercise in creativity, planning, and adaptability, encouraging members to think several steps ahead.
               </p>
-              <p className="text-lg 2xl:text-xl text-gray-300 leading-relaxed max-w-3xl">
+              <p className="text-base 2xl:text-xl text-gray-300 leading-relaxed max-w-3xl">
                 The division emphasizes both competition and collaboration. Through tournaments, team games, and workshops, members gain exposure to different play styles and strategies. UESC Scrabble empowers participants to think creatively, reason logically, and engage with challenges in a structured yet fun way.
               </p>
             </div>
@@ -270,7 +270,7 @@ export default function HorizontalScroll() {
               </div>
             </div>
           </div>
-          <div className="mt-8 lg:absolute lg:right-20 lg:bottom-24 text-center lg:text-right">
+          <div className="mt-8 lg:absolute lg:right-10 lg:bottom-12 text-center lg:text-right">
             <p className="text-gray-400 uppercase text-xs lg:text-sm mb-2">Focus</p>
             <p className="font-semibold text-lg lg:text-xl leading-tight mb-4 lg:mb-6">
               Diplomacy<br />International understanding
@@ -290,7 +290,7 @@ export default function HorizontalScroll() {
 
         {/* MUN Explanation Panel */}
         <section className="horizontal-panel bg-black min-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center p-6 sm:p-12 lg:pt-24 lg:px-24">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-8 lg:mb-12 text-left w-full md:w-5/6 lg:w-3/4">
+          <h1 className="text-4xl md:text-5xl lg:text-5xl 2xl:text-6xl font-extrabold mb-8 lg:mb-10 2xl:mb-12 text-left w-full">
             UESC MUN trains delegates to understand global issues, negotiate, and develop leadership skills
           </h1>
           <div className="flex flex-wrap lg:flex-nowrap items-center lg:items-end gap-8 md:gap-12 lg:gap-20 w-full">
@@ -302,10 +302,10 @@ export default function HorizontalScroll() {
               />
             </div>
             <div className="w-full lg:w-1/2 flex flex-col justify-center lg:justify-start">
-              <p className="text-lg 2xl:text-xl text-gray-300 leading-relaxed max-w-3xl mb-6 lg:mb-8">
+              <p className="text-base 2xl:text-xl text-gray-300 leading-relaxed max-w-3xl mb-6 lg:mb-8">
                 In UESC MUN, members engage in simulations of the United Nations, representing countries and negotiating resolutions. Members develop a deep understanding of international relations, diplomacy, and global issues. Each session emphasizes research, strategy, and collaborative problem-solving, honing critical thinking and negotiation skills.
               </p>
-              <p className="text-lg 2xl:text-xl text-gray-300 leading-relaxed max-w-3xl">
+              <p className="text-base 2xl:text-xl text-gray-300 leading-relaxed max-w-3xl">
                 Beyond knowledge, MUN strengthens leadership, communication, and teamwork. Delegates learn to articulate positions clearly, work with diverse teams, and craft resolutions that address complex challenges. These experiences cultivate capable and confident individuals ready to take on real-world leadership roles.
               </p>
             </div>

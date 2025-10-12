@@ -177,7 +177,7 @@ const ActivityPage = () => {
         {/* Right: Paragraph */}
         <div className="md:w-1/2 flex justify-center">
           <Copy delay={0.3}>
-            <p className="text-xl md:text-3xl leading-relaxed font-bold">
+            <p className="text-xl xl:text-2xl 2xl:text-3xl leading-relaxed font-bold">
               {gallery.description}
             </p>
           </Copy>

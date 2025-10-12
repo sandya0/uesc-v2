@@ -206,97 +206,117 @@ const Gallery = () => {
         });
     }, []);
 
-    const expandItem = useCallback((item) => {
-        const state = stateRef.current;
-        state.isExpanded = true;
-        state.activeItem = item;
-        state.activeItemId = item.id;
-        state.canDrag = false;
-        if(containerRef.current) {
-            containerRef.current.style.cursor = "auto";
-        }
-
-        const imgSrc = item.querySelector("img").src;
-        const imgMatch = imgSrc.match(/\/img(\d+)\.webp/);
-        const imgNum = imgMatch ? parseInt(imgMatch[1]) : 1;
-        const titleIndex = (imgNum - 1) % items.length;
-
-        if (state.titleSplit) state.titleSplit.revert();
-        projectTitleRef.current.textContent = items[titleIndex];
-        state.titleSplit = new SplitType(projectTitleRef.current, { types: "words" });
-        gsap.set(state.titleSplit.words, { y: "100%" });
-        gsap.to(state.titleSplit.words, {
-            y: "0%",
-            duration: 1,
-            stagger: 0.1,
-            ease: "power3.out"
-        });
-
-        item.style.visibility = "hidden";
-
-        const rect = item.getBoundingClientRect();
-        const targetImg = item.querySelector("img").src;
-
-        state.originalPosition = {
-            id: item.id,
-            rect: rect,
-            imgSrc: targetImg,
-        };
-
-        overlayRef.current.classList.add("active");
-        if (navbarRef.current) {
-            navbarRef.current.classList.remove("bg-white");
-            navbarRef.current.classList.add("bg-black");
-        }
-
-        state.expandedItem = document.createElement("div");
-        state.expandedItem.className = "expanded-item";
-        state.expandedItem.style.width = `${state.itemWidth}px`;
-        state.expandedItem.style.height = `${state.itemHeight}px`;
-
-        const img = document.createElement("img");
-        img.src = targetImg;
-        img.loading = "eager";
-        img.decoding = "async";
-        img.style.width = "100%";
-        img.style.height = "100%";
-        img.style.objectFit = "cover";
-        state.expandedItem.appendChild(img);
-        state.expandedItem.addEventListener("click", closeExpandedItem);
-        document.body.appendChild(state.expandedItem);
-
-        document.querySelectorAll(".item").forEach((el) => {
-            if (el.id !== state.activeItemId) {
-                gsap.to(el, {
-                    opacity: 0,
-                    duration: 0.3,
-                    ease: "power2.out"
-                });
+        const expandItem = useCallback((item) => {
+            const state = stateRef.current;
+            state.isExpanded = true;
+            state.activeItem = item;
+            state.activeItemId = item.id;
+            state.canDrag = false;
+            if (containerRef.current) {
+                containerRef.current.style.cursor = "auto";
             }
-        });
 
-        const viewportWidth = window.innerWidth;
-        const targetWidth = viewportWidth * 0.4;
-        const targetHeight = targetWidth * 1.2;
+            const imgSrc = item.querySelector("img").src;
+            const imgMatch = imgSrc.match(/\/img(\d+)\.webp/);
+            const imgNum = imgMatch ? parseInt(imgMatch[1]) : 1;
+            const titleIndex = (imgNum - 1) % items.length;
 
-        gsap.fromTo(
-            state.expandedItem,
-            {
-                width: state.itemWidth,
-                height: state.itemHeight,
-                x: rect.left + state.itemWidth / 2 - window.innerWidth / 2,
-                y: rect.top + state.itemHeight / 2 - window.innerHeight / 2,
-            },
-            {
-                width: targetWidth,
-                height: targetHeight,
-                x: 0,
-                y: 0,
+            if (state.titleSplit) state.titleSplit.revert();
+            projectTitleRef.current.textContent = items[titleIndex];
+            state.titleSplit = new SplitType(projectTitleRef.current, { types: "words" });
+            gsap.set(state.titleSplit.words, { y: "100%" });
+            gsap.to(state.titleSplit.words, {
+                y: "0%",
                 duration: 1,
-                ease: "expo.out",
+                stagger: 0.1,
+                ease: "power3.out"
+            });
+
+            const rect = item.getBoundingClientRect();
+            const targetImg = item.querySelector("img").src;
+
+            state.originalPosition = {
+                id: item.id,
+                rect: rect,
+                imgSrc: targetImg,
+            };
+
+            overlayRef.current.classList.add("active");
+            if (navbarRef.current) {
+                navbarRef.current.classList.remove("bg-white");
+                navbarRef.current.classList.add("bg-black");
             }
-        );
-    }, [closeExpandedItem]);
+
+            document.querySelectorAll(".item").forEach((el) => {
+                if (el.id !== state.activeItemId) {
+                    gsap.to(el, {
+                        opacity: 0,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                }
+            });
+
+            const viewportWidth = window.innerWidth;
+            const targetWidth = viewportWidth * 0.4;
+            const targetHeight = targetWidth * 1.2;
+
+            // --- REFACTORED LOGIC STARTS HERE ---
+
+            state.expandedItem = document.createElement("div");
+            state.expandedItem.className = "expanded-item";
+            state.expandedItem.style.width = `${state.itemWidth}px`;
+            state.expandedItem.style.height = `${state.itemHeight}px`;
+
+            const img = document.createElement("img");
+            img.loading = "eager";
+            img.decoding = "async";
+            img.style.width = "100%";
+            img.style.height = "100%";
+            img.style.objectFit = "cover";
+            state.expandedItem.appendChild(img);
+            state.expandedItem.addEventListener("click", closeExpandedItem);
+
+            // This function contains the logic that should only run AFTER the image loads
+            const onImageLoad = () => {
+                // 1. Now that the new image is ready, hide the original grid item.
+                item.style.visibility = "hidden";
+                
+                // 2. Add the fully-prepared expanded item to the DOM.
+                document.body.appendChild(state.expandedItem);
+
+                // 3. Start the animation.
+                gsap.fromTo(
+                    state.expandedItem,
+                    {
+                        width: state.itemWidth,
+                        height: state.itemHeight,
+                        x: rect.left + state.itemWidth / 2 - window.innerWidth / 2,
+                        y: rect.top + state.itemHeight / 2 - window.innerHeight / 2,
+                    },
+                    {
+                        width: targetWidth,
+                        height: targetHeight,
+                        x: 0,
+                        y: 0,
+                        duration: 1,
+                        ease: "expo.out",
+                    }
+                );
+            };
+
+            // Assign the onload handler and then set the src to trigger the load.
+            img.onload = onImageLoad;
+            img.src = targetImg;
+
+            // Add a safeguard for cached images which might not fire 'onload'.
+            if (img.complete) {
+            onImageLoad();
+            }
+
+            // --- REFACTORED LOGIC ENDS HERE ---
+
+        }, [closeExpandedItem]);
 
     const handleItemClick = useCallback((item) => {
         const state = stateRef.current;
