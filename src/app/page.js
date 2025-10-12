@@ -1,18 +1,17 @@
 "use client";
 
-import React, { useState, Suspense } from 'react'
-import Hero from './components/Hero'
-import AboutUS from './components/AboutUS'
-import LoadingScreen from './components/LoadingScreen'
-import { ReactLenis } from 'lenis/react'
-
-const Debate = React.lazy(() => import('./components/Debate'));
-const Scrabble = React.lazy(() => import('./components/Scrabble'));
-const MUN = React.lazy(() => import('./components/MUN'));
-const Speech = React.lazy(() => import('./components/Speech'));
-const JoinUs = React.lazy(() => import('./components/JoinUs'));
-const Slogan = React.lazy(() => import('./components/Slogan'));
-const Footer = React.lazy(() => import('./components/Footer'));
+import React from 'react';
+import Hero from './components/Hero';
+import AboutUS from './components/AboutUS';
+import LoadingScreen from './components/LoadingScreen';
+import { ReactLenis } from 'lenis/react';
+import Debate from './components/Debate';
+import Scrabble from './components/Scrabble';
+import MUN from './components/MUN';
+import Speech from './components/Speech';
+import JoinUs from './components/JoinUs';
+import Slogan from './components/Slogan';
+import Footer from './components/Footer';
 
 const App = () => {
   return (
@@ -20,15 +19,13 @@ const App = () => {
       <div>
         <Hero />
         <AboutUS />
-        <Suspense fallback={<div>Loading...</div>}>
-          <Debate />
-          <Scrabble />
-          <MUN />
-          <Speech />
-          <JoinUs />
-          <Slogan />
-          <Footer />
-        </Suspense>
+        <Debate />
+        <Scrabble />
+        <MUN />
+        <Speech />
+        <JoinUs />
+        <Slogan />
+        <Footer />
       </div>
     </ReactLenis>
   )

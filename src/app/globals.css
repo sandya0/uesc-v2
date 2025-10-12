@@ -2,7 +2,16 @@
 
 @font-face {
   font-family: 'PP Neue Montreal';
-  src: url("/fonts/ppneuemontreal-bold.otf") format("otf");
+  src: url("/fonts/ppneuemontreal-book.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url("/fonts/ppneuemontreal-bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
 }
 
 @theme {
