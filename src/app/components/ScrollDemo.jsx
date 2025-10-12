@@ -49,7 +49,7 @@ export default function HorizontalScroll() {
         className="horizontal-container flex flex-wrap lg:flex-nowrap lg:h-screen overflow-y-auto lg:overflow-y-hidden lg:overflow-x-hidden"
       >
         {/* Speech Panel */}
-        <section className="horizontal-panel bg-black min-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center items-center px-6 lg:px-12 relative">
+        <section className="horizontal-panel bg-black max-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center items-center px-6 mt-5 lg:px-12 relative">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-extrabold mb-8 lg:mb-12">Speech Division</h1>
             <img
@@ -91,7 +91,7 @@ export default function HorizontalScroll() {
         </section>
 
         {/* Speech Explanation Panel */}
-        <section className="horizontal-panel bg-black min-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center p-6 sm:p-12 lg:pt-24 lg:px-24">
+        <section className="horizontal-panel bg-black max-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center p-6 sm:p-12 lg:pt-24 lg:px-24">
           <h1 className="text-4xl md:text-5xl lg:text-5xl 2xl:text-6xl font-extrabold mb-8 lg:mb-10 2xl:mb-12 text-left w-full">
             UESC Speech nurtures confident speakers who can inspire, persuade, and express themselves effectively
           </h1>
@@ -115,7 +115,7 @@ export default function HorizontalScroll() {
         </section>
 
         {/* Debate Panel */}
-        <section className="horizontal-panel bg-black min-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center items-center px-6 lg:px-12 relative">
+        <section className="horizontal-panel bg-black max-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center items-center px-6 lg:px-12 relative">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-extrabold mb-8 lg:mb-12">Debate Division</h1>
             <img
@@ -157,7 +157,7 @@ export default function HorizontalScroll() {
         </section>
 
         {/* Debate Explanation Panel */}
-        <section className="horizontal-panel bg-black min-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center p-6 sm:p-12 lg:pt-24 lg:px-24">
+        <section className="horizontal-panel bg-black max-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center p-6 sm:p-12 lg:pt-24 lg:px-24">
           <h1 className="text-4xl md:text-5xl lg:text-5xl 2xl:text-6xl font-extrabold mb-8 lg:mb-10 2xl:mb-12 text-left w-full">
             UESC Debate develops critical thinkers who can analyze, articulate, and persuade with confidence
           </h1>
@@ -181,7 +181,7 @@ export default function HorizontalScroll() {
         </section>
 
         {/* Scrabble Panel */}
-        <section className="horizontal-panel bg-black min-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center items-center px-6 lg:px-12 relative">
+        <section className="horizontal-panel bg-black max-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center items-center px-6 lg:px-12 relative">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-extrabold mb-8 lg:mb-12">Scrabble Division</h1>
             <img
@@ -223,7 +223,7 @@ export default function HorizontalScroll() {
         </section>
 
         {/* Scrabble Explanation Panel */}
-        <section className="horizontal-panel bg-black min-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center p-6 sm:p-12 lg:pt-24 lg:px-24">
+        <section className="horizontal-panel bg-black max-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center p-6 sm:p-12 lg:pt-24 lg:px-24">
           <h1 className="text-4xl md:text-5xl lg:text-5xl 2xl:text-6xl font-extrabold mb-8 lg:mb-10 2xl:mb-12 text-left w-full">
             UESC Scrabble transforms language learning into strategic thinking and problem-solving
           </h1>
@@ -247,7 +247,7 @@ export default function HorizontalScroll() {
         </section>
 
         {/* MUN Panel */}
-        <section className="horizontal-panel bg-black min-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center items-center px-6 lg:px-12 relative">
+        <section className="horizontal-panel bg-black max-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center items-center px-6 lg:px-12 relative">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-extrabold mb-8 lg:mb-12">MUN Division</h1>
             <img
@@ -289,7 +289,7 @@ export default function HorizontalScroll() {
         </section>
 
         {/* MUN Explanation Panel */}
-        <section className="horizontal-panel bg-black min-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center p-6 sm:p-12 lg:pt-24 lg:px-24">
+        <section className="horizontal-panel bg-black max-h-screen w-full lg:min-w-screen lg:h-full flex flex-col justify-center p-6 sm:p-12 lg:pt-24 lg:px-24">
           <h1 className="text-4xl md:text-5xl lg:text-5xl 2xl:text-6xl font-extrabold mb-8 lg:mb-10 2xl:mb-12 text-left w-full">
             UESC MUN trains delegates to understand global issues, negotiate, and develop leadership skills
           </h1>
