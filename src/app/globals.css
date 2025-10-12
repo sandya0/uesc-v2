@@ -1,37 +1,30 @@
 @import "tailwindcss";
 
 @font-face {
-  font-family: 'PP Neue Montreal';
-  src: url("/fonts/ppneuemontreal-book.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'PP Neue Montreal';
-  src: url("/fonts/ppneuemontreal-bold.otf") format("opentype");
-  font-weight: bold;
+  font-family: 'Inter';
+  src: url("/fonts/InterDisplay-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
   font-style: normal;
 }
 
 @theme {
-    --color-white: #efefef;
-    --font-sans: "PP Neue Montreal", sans-serif;
-    --font-modern-negra: "Modern Negra", sans-serif;
-    --font-serif: "DM Serif Text", serif;
+  --color-white: #efefef;
+  --font-sans: "Inter", sans-serif;
+  --font-modern-negra: "Modern Negra", sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
 }
 
-body{
+body {
   background-color: #efefef;
 }
 
 html, body {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 body::-webkit-scrollbar {
@@ -65,10 +58,10 @@ body::-webkit-scrollbar {
 
 .horizontal-container {
   overflow-x: scroll;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 10+ */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .horizontal-container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
 }
