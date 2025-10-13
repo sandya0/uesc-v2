@@ -124,11 +124,11 @@ const ActivityPage = () => {
 
         <div className="px-6 md:px-8 mt-20 md:mt-32">
           <div className="flex flex-col sm:flex-row justify-between items-start mb-24 md:mb-32 gap-6 sm:gap-0">
-            <h1 className="text-6xl sm:text-7xl md:text-9xl xl:text-[200px] font-bold leading-none tracking-tight">
+            <h1 className="text-6xl sm:text-7xl md:text-9xl xl:text-[150px] 2xl:text-[200px] font-bold leading-none tracking-tight">
               Activities
             </h1>
             <div className="flex items-start gap-3">
-              <span className="text-6xl sm:text-7xl md:text-9xl xl:text-[200px] font-bold leading-none tracking-tight">
+              <span className="text-6xl sm:text-7xl md:text-9xl xl:text-[150px] 2xl:text-[200px] font-bold leading-none tracking-tight">
                 2025
               </span>
             </div>
