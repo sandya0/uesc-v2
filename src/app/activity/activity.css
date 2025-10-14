@@ -25,10 +25,10 @@
   background-size: cover;
   flex: none;
   position: relative;
+  overflow: hidden;
 }
 
-
-/* Bento layout */
+/* Bento layout (desktop) */
 .gallery--bento {
   display: grid;
   gap: 1vh;
@@ -85,28 +85,31 @@
   height: 100%;
 }
 
+/* -------------------- Responsive for tablet & mobile -------------------- */
 @media (max-width: 1024px) {
+  .gallery-wrap {
+    height: auto;
+    min-height: unset;
+    padding: 1rem 0;
+  }
+
   .gallery--bento {
-    grid-template-columns: repeat(2, 48vw);
-    grid-template-rows: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: minmax(200px, auto);
     gap: 2vw;
   }
 
-  .gallery--bento .gallery__item:nth-child(1),
-  .gallery--bento .gallery__item:nth-child(2),
-  .gallery--bento .gallery__item:nth-child(3),
-  .gallery--bento .gallery__item:nth-child(4),
-  .gallery--bento .gallery__item:nth-child(5),
-  .gallery--bento .gallery__item:nth-child(6),
-  .gallery--bento .gallery__item:nth-child(7),
-  .gallery--bento .gallery__item:nth-child(8) {
+  /* Reset specific item placements */
+  .gallery--bento .gallery__item:nth-child(n) {
     grid-area: auto;
   }
-}
 
-@media (max-width: 767px) {
-  .gallery--bento {
-    grid-template-columns: repeat(1, 98vw);
-    gap: 2vw;
+  /* Make images square and visible */
+  .gallery__item {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
   }
 }

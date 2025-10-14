@@ -62,7 +62,7 @@ const Speech = () => {
   return (
     <section
       id="Speech-activities"
-      className="min-h-screen w-full flex flex-col items-center justify-center p-6 text-black"
+      className="xl:min-h-screen w-full flex flex-col items-center justify-center p-6 text-black"
     >
       <div className="w-full mx-auto">
         {/* Title Section */}

@@ -143,18 +143,22 @@ const ActivityPage = () => {
         </div>
 
         {/* HERO SECTION */}
-        <section className="w-full bg-white flex flex-col justify-center items-center overflow-hidden px-4 sm:p-6">
+        <section className="w-full bg-white flex flex-col justify-center items-center overflow-hidden px-4 sm:px-6">
           <h1
             className="text-black font-bold whitespace-nowrap leading-none px-4"
             style={{ fontSize: "37vw", lineHeight: 0.8 }}
           >
             UESC
           </h1>
-          <div className="w-full h-screen relative overflow-hidden flex justify-center items-center">
+          <div className="w-full h-[40vh] sm:h-[60vh] md:h-screen relative overflow-hidden flex justify-center items-center">
             <img
               src="/images/hero.webp"
               alt="UESC activity background"
               className="absolute inset-0 w-full h-full object-cover object-top md:object-center"
+              // Optional: Add loading priority for LCP
+              loading="eager"
+              // Optional: Add critical image preload
+              fetchPriority="high"
             />
             <div className="absolute inset-0 bg-black opacity-10"></div>
           </div>
@@ -169,7 +173,7 @@ const ActivityPage = () => {
           <div className="flex flex-1 items-center justify-center p-4 sm:p-6">
             <p
               ref={mainTextRef}
-              className="about-main text-2xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-semibold leading-relaxed max-w-9xl text-indent-8"
+              className="about-main text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-semibold leading-relaxed max-w-9xl text-indent-8"
             >
               &nbsp;&nbsp;&nbsp;&nbsp;At UESC, we are more than just a club. We are a community that grows together through language. Our activities in Debate, Speech, Scrabble, and Model United Nations help students express ideas with confidence, think critically, and communicate with clarity. We believe that mastering English is not only about speaking fluently but also about connecting meaningfully with others.
             </p>

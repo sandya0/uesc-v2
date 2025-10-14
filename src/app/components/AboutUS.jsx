@@ -36,7 +36,7 @@ const AboutUs = () => {
             className="flex flex-col items-start text-left space-y-6"
           >
             <Copy>
-            <div className="min-w-full text-xl lg:text-2xl xl:text-2xl 2xl:text-4xl leading-relaxed font-bold">
+            <div className="xl:min-w-full text-xl lg:text-2xl xl:text-2xl 2xl:text-4xl leading-relaxed font-bold">
               At UESC, we believe English is more than just a language — it is a tool for expression, collaboration, and global connection. We are a student activity unit at Universitas Multimedia Nusantara (UMN), dedicated to enhancing our members’ English skills while fostering leadership, creativity, and teamwork. With divisions ranging from Debate, Speech, and Scrabble to Model United Nations (MUN), UESC provides a platform for every student to grow, excel, and shine.
             </div>
             </Copy>
