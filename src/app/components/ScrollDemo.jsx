@@ -53,7 +53,7 @@ export default function HorizontalScroll() {
           <div className="text-center w-full">
             <h1 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-extrabold mb-6 sm:mb-8 lg:mb-12">Speech Division</h1>
             <img
-              src="/images/speech1.webp"
+              src="/images/speech3.webp"
               alt="speech division"
               className="rounded-lg shadow-lg mx-auto mb-6 sm:mb-8 lg:mb-10 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl h-auto object-contain"
             />
@@ -106,7 +106,7 @@ export default function HorizontalScroll() {
           <div className="flex flex-col lg:flex-row items-center lg:items-end gap-6 sm:gap-8 md:gap-10 lg:gap-12 xl:gap-16 2xl:gap-20 w-full">
             <div className="w-full lg:w-1/2 flex justify-center lg:justify-start">
               <img
-                src="/images/speech2.webp"
+                src="/images/speech5.webp"
                 alt="A person giving a passionate speech"
                 className="rounded-lg shadow-2xl w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl h-auto object-cover"
               />
@@ -127,7 +127,7 @@ export default function HorizontalScroll() {
           <div className="text-center w-full">
             <h1 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-extrabold mb-6 sm:mb-8 lg:mb-12">Debate Division</h1>
             <img
-              src="/images/debate1.webp"
+              src="/images/debate3.webp"
               alt="debate division"
               className="rounded-lg shadow-lg mx-auto mb-6 sm:mb-8 lg:mb-10 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl h-auto object-contain"
             />
@@ -180,7 +180,7 @@ export default function HorizontalScroll() {
           <div className="flex flex-col lg:flex-row items-center lg:items-end gap-6 sm:gap-8 md:gap-10 lg:gap-12 xl:gap-16 2xl:gap-20 w-full">
             <div className="w-full lg:w-1/2 flex justify-center lg:justify-start">
               <img
-                src="/images/debate2.webp"
+                src="/images/debate4.webp"
                 alt="Two teams engaged in a debate"
                 className="rounded-lg shadow-2xl w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl h-auto object-cover"
               />
@@ -201,7 +201,7 @@ export default function HorizontalScroll() {
           <div className="text-center w-full">
             <h1 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-extrabold mb-6 sm:mb-8 lg:mb-12">Scrabble Division</h1>
             <img
-              src="/images/scrabble1.webp"
+              src="/images/scrabble3.webp"
               alt="scrabble division"
               className="rounded-lg shadow-lg mx-auto mb-6 sm:mb-8 lg:mb-10 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl h-auto object-contain"
             />
@@ -254,7 +254,7 @@ export default function HorizontalScroll() {
           <div className="flex flex-col lg:flex-row items-center lg:items-end gap-6 sm:gap-8 md:gap-10 lg:gap-12 xl:gap-16 2xl:gap-20 w-full">
             <div className="w-full lg:w-1/2 flex justify-center lg:justify-start">
               <img
-                src="/images/scrabble2.webp"
+                src="/images/scrabble4.webp"
                 alt="A close-up of a Scrabble board with a high-scoring word"
                 className="rounded-lg shadow-2xl w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl h-auto object-cover"
               />
@@ -275,7 +275,7 @@ export default function HorizontalScroll() {
           <div className="text-center w-full">
             <h1 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-extrabold mb-6 sm:mb-8 lg:mb-12">MUN Division</h1>
             <img
-              src="/images/mun1.webp"
+              src="/images/mun3.webp"
               alt="mun division"
               className="rounded-lg shadow-lg mx-auto mb-6 sm:mb-8 lg:mb-10 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl h-auto object-contain"
             />
@@ -328,7 +328,7 @@ export default function HorizontalScroll() {
           <div className="flex flex-col lg:flex-row items-center lg:items-end gap-6 sm:gap-8 md:gap-10 lg:gap-12 xl:gap-16 2xl:gap-20 w-full">
             <div className="w-full lg:w-1/2 flex justify-center lg:justify-start">
               <img
-                src="/images/mun2.webp"
+                src="/images/mun4.webp"
                 alt="MUN delegates in a conference setting"
                 className="rounded-lg shadow-2xl w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl h-auto object-cover"
               />
