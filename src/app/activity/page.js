@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef } from "react";
+import Image from "next/image";
 import { ReactLenis } from "lenis/react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -21,7 +22,6 @@ const ActivityPage = () => {
     const galleryItems = galleryElement.querySelectorAll(".gallery__item");
     if (galleryItems.length === 0) return;
 
-    // Revert previous context if exists
     const ctxIndex = flipCtxRef.current.findIndex((ctx) => ctx?.galleryId === galleryId);
     if (ctxIndex >= 0) {
       flipCtxRef.current[ctxIndex].ctx.revert();
@@ -55,7 +55,6 @@ const ActivityPage = () => {
         tl.add(flip);
       });
 
-      // Save context reference
       if (ctxIndex >= 0) {
         flipCtxRef.current[ctxIndex] = { galleryId, ctx };
       } else {
@@ -73,10 +72,8 @@ const ActivityPage = () => {
 
     return () => {
       window.removeEventListener("resize", handleResize);
-
       flipCtxRef.current.forEach((ctxObj) => ctxObj.ctx.revert());
       flipCtxRef.current = [];
-
       ScrollTrigger.getAll().forEach((st) => st.kill());
 
       galleryIds.forEach((id) => {
@@ -96,21 +93,48 @@ const ActivityPage = () => {
       title: "Prelude",
       description:
         "Prelude UESC is an annual event by the UMN English Student Council that welcomes new members, introduces them to the organization, and fosters teamwork and an English-speaking culture on campus through bonding activities, workshops, and fun challenges.",
-      images: ["/images/hero.webp", "/images/hero.webp", "/images/hero.webp", "/images/hero.webp", "/images/hero.webp", "/images/hero.webp", "/images/hero.webp", "/images/hero.webp"],
+      images: [
+        "/images/prelude1.webp",
+        "/images/prelude2.webp",
+        "/images/prelude3.webp",
+        "/images/prelude4.webp",
+        "/images/prelude5.webp",
+        "/images/prelude6.webp",
+        "/images/prelude7.webp",
+        "/images/prelude8.webp",
+      ],
     },
     {
       id: "gallery-joint",
       title: "Joint Meeting",
       description:
         "The UESC Joint Meeting is a gathering of all four UESC divisions, which are Scrabble, Speech, Debate, and MUN. The purpose of the meeting is to provide an opportunity for members from different divisions to come together, strengthen their relationships, and engage in enjoyable activities. It is designed to promote teamwork, communication, and a sense of community within UESC while allowing members to have fun and connect outside of their regular division activities.",
-      images: ["/images/hero.webp", "/images/hero.webp", "/images/hero.webp", "/images/hero.webp", "/images/hero.webp", "/images/hero.webp", "/images/hero.webp", "/images/hero.webp"],
+      images: [
+        "/images/joint1.webp",
+        "/images/joint2.webp",
+        "/images/joint3.webp",
+        "/images/joint4.webp",
+        "/images/joint5.webp",
+        "/images/joint6.webp",
+        "/images/joint7.webp",
+        "/images/joint8.webp",
+      ],
     },
     {
       id: "gallery-unity",
       title: "Unity",
       description:
         "UNITY 2025 is an English language competition organized by the UMN English Student Council (UESC) at Universitas Multimedia Nusantara. The event features three main contests: Debate, Speech, and Scrabble. The Debate competition develops critical thinking, logical argumentation, and confidence in presenting ideas. The Speech competition sharpens public speaking skills, focusing on clarity, structure, and effective communication. Scrabble challenges participants to expand their vocabulary while enhancing strategic thinking. UNITY 2025 provides a platform for students to compete, collaborate, and showcase their English proficiency in a fun and educational environment.",
-      images: ["/images/hero.webp", "/images/hero.webp", "/images/hero.webp", "/images/hero.webp", "/images/hero.webp", "/images/hero.webp", "/images/hero.webp", "/images/hero.webp"],
+      images: [
+        "/images/unity1.webp",
+        "/images/unity2.webp",
+        "/images/unity3.webp",
+        "/images/unity4.webp",
+        "/images/unity5.webp",
+        "/images/unity6.webp",
+        "/images/unity7.webp",
+        "/images/unity8.webp",
+      ],
     },
   ];
 
@@ -134,59 +158,57 @@ const ActivityPage = () => {
             </div>
           </div>
 
-          {/* About Section */}
           <div className="grid md:grid-cols-2 gap-16 md:gap-32 mb-20">
             <div>
               <h2 className="text-4xl md:text-5xl font-bold">Our Events & Programs</h2>
             </div>
             <div>
               <Copy delay={0.5}>
-              <p className="text-xl lg:text-2xl 2xl:text-3xl leading-relaxed font-bold">
-                UESC hosts a variety of activities throughout the year to help
-                members develop their English skills, teamwork, and confidence.
-                From debate competitions to workshops and bonding events, every
-                program is designed to engage and empower our members while
-                fostering a vibrant community.
-              </p>
+                <p className="text-xl lg:text-2xl 2xl:text-3xl leading-relaxed font-bold">
+                  UESC hosts a variety of activities throughout the year to help
+                  members develop their English skills, teamwork, and confidence.
+                  From debate competitions to workshops and bonding events, every
+                  program is designed to engage and empower our members while
+                  fostering a vibrant community.
+                </p>
               </Copy>
             </div>
           </div>
 
-          {/* Loop through galleries */}
-{galleries.map((gallery) => (
-  <div key={gallery.id} className="mb-32">
-    {/* Gallery Images */}
-    <div className="gallery-wrap mb-12">
-      <div id={gallery.id} className="gallery gallery--bento">
-        {gallery.images.map((img, idx) => (
-          <div className="gallery__item" key={idx}>
-            <img src={img} alt={`${gallery.title} showcase`} />
-          </div>
-        ))}
-      </div>
-    </div>
+          {galleries.map((gallery) => (
+            <div key={gallery.id} className="mb-32">
+              <div className="gallery-wrap mb-12">
+                <div id={gallery.id} className="gallery gallery--bento">
+                  {gallery.images.map((img, idx) => (
+                    <div className="gallery__item" key={idx}>
+                      <Image
+                        src={img}
+                        alt={`${gallery.title} showcase`}
+                        fill
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
 
-    {/* Explanation Section */}
-    <div className="px-6 md:px-8 py-12">
-      <div className="flex flex-col md:flex-row gap-12 md:gap-24 items-start">
-        {/* Left: Heading */}
-        <div className="md:w-1/2 flex justify-start">
-          <h2 className="text-6xl md:text-7xl font-bold">{gallery.title}</h2>
-        </div>
+              <div className="px-6 md:px-8 py-12">
+                <div className="flex flex-col md:flex-row gap-12 md:gap-24 items-start">
+                  <div className="md:w-1/2 flex justify-start">
+                    <h2 className="text-6xl md:text-7xl font-bold">{gallery.title}</h2>
+                  </div>
 
-        {/* Right: Paragraph */}
-        <div className="md:w-1/2 flex justify-center">
-          <Copy delay={0.3}>
-            <p className="text-xl xl:text-2xl 2xl:text-3xl leading-relaxed font-bold">
-              {gallery.description}
-            </p>
-          </Copy>
-        </div>
-      </div>
-    </div>
-  </div>
-))}
-
+                  <div className="md:w-1/2 flex justify-center">
+                    <Copy delay={0.3}>
+                      <p className="text-xl xl:text-2xl 2xl:text-3xl leading-relaxed font-bold">
+                        {gallery.description}
+                      </p>
+                    </Copy>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
         <Footer />
