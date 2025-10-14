@@ -218,7 +218,7 @@ const Gallery = () => {
             }
 
             const imgSrc = item.querySelector("img").src;
-            const imgMatch = imgSrc.match(/(?:\/|^)images\/img(\d+)\.webp$/);
+            const imgMatch = imgSrc.match(/(?:\/|^)images\/img(\d+)\.webp/i);
             const imgNum = imgMatch ? parseInt(imgMatch[1]) : 1;
             const titleIndex = (imgNum - 1) % items.length;
 
