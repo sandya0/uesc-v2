@@ -14,7 +14,6 @@ const Footer = () => {
     { name: "What We Do", href: "whatwedo" },
     { name: "Activity", href: "activity" },
     { name: "Gallery", href: "gallery" },
-
   ];
 
   const router = useTransitionRouter();
@@ -53,14 +52,15 @@ const Footer = () => {
   }, []);
 
   function triggerPageTransition(path) {
-    // Animate the whole <html> element
+    window.scrollTo({ top: 0, behavior: 'instant' }); // ← scroll to top before transition
+
     const animation = document.documentElement.animate([
       {
-      clipPath: "polygon(25% 75%, 75% 75%, 75% 75%, 25% 75%)",
-    },
-     {
-      clipPath: "polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)",
-    }],
+        clipPath: "polygon(25% 75%, 75% 75%, 75% 75%, 25% 75%)",
+      },
+      {
+        clipPath: "polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)",
+      }],
       {
         duration: 2000,
         easing: "cubic-bezier(0.9, 0, 0.1, 1)",
@@ -78,7 +78,7 @@ const Footer = () => {
     }
 
     router.push(path, {
-      onTransitionReady: triggerPageTransition,
+      onTransitionReady: () => triggerPageTransition(path),
     });
   };
 
@@ -118,7 +118,6 @@ const Footer = () => {
               ))}
             </ul>
           </div>
-
 
           {/* Right Section: Contact Info */}
           <div className="lg:col-span-1 text-left text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl">

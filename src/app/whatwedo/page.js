@@ -173,7 +173,7 @@ const ActivityPage = () => {
           <div className="flex flex-1 items-center justify-center p-4 sm:p-6">
             <p
               ref={mainTextRef}
-              className="about-main text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-semibold leading-relaxed max-w-9xl text-indent-8"
+              className="about-main text-xl md:text-xl lg:text-2xl xl:text-3xl 2xl:text-5xl font-semibold leading-relaxed max-w-9xl text-indent-8"
             >
               &nbsp;&nbsp;&nbsp;&nbsp;At UESC, we are more than just a club. We are a community that grows together through language. Our activities in Debate, Speech, Scrabble, and Model United Nations help students express ideas with confidence, think critically, and communicate with clarity. We believe that mastering English is not only about speaking fluently but also about connecting meaningfully with others.
             </p>
