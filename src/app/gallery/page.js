@@ -449,7 +449,7 @@ const Gallery = () => {
             } else if (width > 768) {
                 newCellSize = 450; 
             } else {
-                newCellSize = 300; 
+                newCellSize = 400; 
             }
 
             state.cellSize = newCellSize;
