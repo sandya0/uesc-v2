@@ -130,11 +130,11 @@ const Navbar = () => {
       </div>
 
       {/* Desktop Navbar */}
-      <div className="flex justify-between items-center text-4xl sm:text-4xl md:text-5xl xl:text-6xl font-bold uppercase">
+      <div className="flex justify-between items-center text-3xl sm:text-2xl md:text-3xl xl:text-4xl 2xl:text-6xl font-bold uppercase">
         <a href="/" onClick={(e) => handdleNavigation(e, "/")}>
           UESC
         </a>
-        <div className="hidden md:flex  flex-1 justify-center gap-x-8 text-lg md:text-xl xl:text-2xl">
+        <div className="hidden md:flex  flex-1 justify-center gap-x-8 text-base md:text-lg  xl:text-xl  2xl:text-2xl">
           {[
             { name: "What We Do", path: "/whatwedo" },
             { name: "Activity", path: "/activity" },
