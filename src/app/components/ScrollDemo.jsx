@@ -185,10 +185,10 @@ export default function HorizontalScroll() {
                   />
                 </div>
                 <div className="w-full lg:w-1/2 flex flex-col justify-center lg:justify-start">
-                  <p className="text-xs sm:text-sm md:text-base xl:text-base 2xl:text-2xl text-gray-300 leading-relaxed sm:leading-loose max-w-3xl mb-4 sm:mb-6 lg:mb-8">
+                  <p className="text-xs sm:text-sm md:text-base xl:text-lg 2xl:text-2xl text-gray-300 leading-relaxed sm:leading-loose max-w-3xl mb-4 sm:mb-6 lg:mb-8">
                     {div.desc1}
                   </p>
-                  <p className="text-xs sm:text-sm md:text-base xl:text-base 2xl:text-2xl text-gray-300 leading-relaxed sm:leading-loose max-w-3xl">
+                  <p className="text-xs sm:text-sm md:text-base xl:text-lg 2xl:text-2xl text-gray-300 leading-relaxed sm:leading-loose max-w-3xl">
                     {div.desc2}
                   </p>
                 </div>

@@ -91,7 +91,7 @@ const Footer = () => {
           
           {/* Left Section: Image and Logo */}
           <div className="lg:col-span-1">
-            <div className="w-full h-[250px] sm:h-[300px] md:h-[350px] lg:h-[320px] xl:h-[380px] 2xl:h-[400px] relative mb-6 sm:mb-7 md:mb-8 overflow-hidden rounded-lg">
+            <div className="w-full h-[250px] sm:h-[300px] md:h-[350px] lg:h-[320px] xl:h-[340px] 2xl:h-[400px] relative mb-6 sm:mb-7 md:mb-8 overflow-hidden rounded-lg">
               <Image 
                 src="/images/footer.webp"
                 alt="UESC Event" 
@@ -99,7 +99,7 @@ const Footer = () => {
                 className="object-cover"
               />
             </div>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold">UESC</h2>
+            <h2 className="text-4xl sm:text-4xl md:text-5xl xl:text-6xl xl:text-8xl font-bold">UESC</h2>
           </div>
 
           {/* Middle Section: Links */}
@@ -110,7 +110,7 @@ const Footer = () => {
                   <Link 
                     lineHeight="1.2" 
                     onClick={(e) => handdleNavigation(e, `/${link.href}`)} 
-                    className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl h-[1.1em] font-bold"
+                    className="text-xl sm:text-xl md:text-2xl lg:text-2xl xl:text-3xl 2xl:text-5xl h-[1.1em] font-bold"
                   >
                     {link.name}
                   </Link>
@@ -120,7 +120,7 @@ const Footer = () => {
           </div>
 
           {/* Right Section: Contact Info */}
-          <div className="lg:col-span-1 text-left text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl">
+          <div className="lg:col-span-1 text-left text-sm sm:text-base md:text-lg lg:text-lg xl:text-xl 2xl:text-3xl">
             <div>
               <p className="mb-3 sm:mb-4">UMN English Student Council (UESC) Empowering Voices, Building Confidence, Creating Community</p>
               <p>
