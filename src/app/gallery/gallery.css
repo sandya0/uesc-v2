@@ -17,31 +17,27 @@
 
 .canvas {
   position: absolute;
+  top: 0;
+  left: 0;
   will-change: transform;
 }
 
 /* --- Grid Items --- */
 .item {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 120px;
   height: 160px;
   overflow: hidden;
   background-color: #1a1a1a;
   cursor: pointer;
+  will-change: transform;
 }
 
 /* --- Expanded View & Overlay --- */
 .overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /* This dark, semi-transparent background is more suitable for a gallery */
-  background-color: rgba(26, 26, 26, 0.9);
-  pointer-events: none;
-  opacity: 0;
-  z-index: 50; /* Adjusted z-index */
+  /* Positioning, colors, and opacity are handled by Tailwind in Gallery.jsx */
   transition: opacity 0.5s cubic-bezier(0.9, 0, 0.1, 1);
 }
 
@@ -55,15 +51,14 @@
   z-index: 100;
   top: 50%;
   left: 50%;
-  /* transform is set by GSAP, but this is a good fallback */
-  transform: translate(-50%, -50%);
+  /* Removed the transform property so GSAP has full control over x/y */
   background-color: #1a1a1a;
   overflow: hidden;
   cursor: pointer;
+  will-change: transform, width, height;
 }
 
 /* --- Shared Image Styles --- */
-/* Combined rule for both item types to avoid repetition */
 .item img,
 .expanded-item img {
   width: 100%;
@@ -71,35 +66,4 @@
   object-fit: cover;
   /* Prevents browser's native image drag behavior */
   pointer-events: none;
-}
-
-/* --- Typography for Expanded View --- */
-.projectTitle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  text-align: center;
-  pointer-events: none;
-  z-index: 150; /* Ensures title is above expanded item */
-}
-
-.projectTitle p {
-  position: relative;
-  height: 42px; /* Set height for the clip-path container */
-  color: white;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-  overflow: hidden; /* Ensures words don't show before animation */
-}
-
-/* Styles for SplitType animation */
-.projectTitle p .word {
-  position: relative;
-  display: inline-block;
-  font-size: 36px;
-  letter-spacing: -0.02rem;
-  margin-right: 0.1em;
-  transform: translateY(100%); /* Start words hidden below */
-  will-change: transform;
 }

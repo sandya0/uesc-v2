@@ -1,31 +1,22 @@
 "use client";
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import Image from 'next/image';
 import Navbar from '../components/Navbar';
 import { useRevealer } from '../components/template/useRevealer';
 import gsap from 'gsap';
 import { CustomEase } from 'gsap/all';
-import SplitType from "split-type";
-import items from '../components/template/items';
 import './gallery.css';
 
 gsap.registerPlugin(CustomEase);
 CustomEase.create("hop", "0.9, 0, 0.1, 1");
 
-// Stable primitive props only — memo actually works now
 const Item = React.memo(({ id, col, row, itemWidth, itemHeight, itemGap, itemCount, onClick, isVisible }) => {
     const itemRef = useRef(null);
     const itemNum = (Math.abs(row * 4 + col) % itemCount) + 1;
     const imgSrc = `/img${itemNum}.webp`;
 
-    useEffect(() => {
-        if (itemRef.current) {
-            gsap.set(itemRef.current, {
-                left: `${col * (itemWidth + itemGap)}px`,
-                top: `${row * (itemWidth + itemGap)}px`,
-            });
-        }
-    }, [col, row, itemWidth, itemGap]);
+    // 🚀 FIX: yPos now correctly uses itemHeight instead of itemWidth!
+    const xPos = col * (itemWidth + itemGap);
+    const yPos = row * (itemHeight + itemGap);
 
     return (
         <div
@@ -35,22 +26,25 @@ const Item = React.memo(({ id, col, row, itemWidth, itemHeight, itemGap, itemCou
             data-col={col}
             data-row={row}
             onClick={() => onClick(itemRef.current)}
-            style={{ visibility: isVisible ? 'visible' : 'hidden' }}
+            style={{ 
+                top: 0, 
+                left: 0, 
+                visibility: isVisible ? 'visible' : 'hidden',
+                transform: `translate3d(${xPos}px, ${yPos}px, 0)`,
+                width: `${itemWidth}px`,
+                height: `${itemHeight}px`
+            }}
         >
-            <Image
+            <img
                 src={imgSrc}
                 alt={`Image ${itemNum}`}
-                width={itemWidth}
-                height={itemHeight}
-                quality={80}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 draggable={false}
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                decoding="async"
+                style={{ width: "100%", height: "100%", objectFit: "cover", pointerEvents: "none" }}
             />
         </div>
     );
 }, (prev, next) => {
-    // Custom comparator: only re-render when these actually change
     return (
         prev.id === next.id &&
         prev.isVisible === next.isVisible &&
@@ -61,19 +55,10 @@ const Item = React.memo(({ id, col, row, itemWidth, itemHeight, itemGap, itemCou
 });
 Item.displayName = 'Item';
 
-// Preload rendered once, outside the component
 const PreloadImages = React.memo(() => (
-    <div className="hidden" aria-hidden="true">
+    <div className="hidden" aria-hidden="true" style={{ display: "none" }}>
         {Array.from({ length: 20 }, (_, i) => (
-            <Image
-                key={i + 1}
-                src={`/img${i + 1}.webp`}
-                alt=""
-                width={120}
-                height={160}
-                priority={i < 5}
-                quality={80}
-            />
+            <img key={i + 1} src={`/img${i + 1}.webp`} alt="" />
         ))}
     </div>
 ));
@@ -85,19 +70,20 @@ const Gallery = () => {
     const containerRef = useRef(null);
     const canvasRef = useRef(null);
     const overlayRef = useRef(null);
-    const projectTitleRef = useRef(null);
     const navbarRef = useRef(null);
 
     const [visibleItems, setVisibleItems] = useState([]);
-    // Track expanded item id separately so Item.memo gets a stable boolean
     const [expandedItemId, setExpandedItemId] = useState(null);
+    
+    // Increased default gap sizes
+    const [gridConfig, setGridConfig] = useState({ itemWidth: 120, itemHeight: 160, itemGap: 150 });
 
     const stateRef = useRef({
         itemCount: 20,
-        itemGap: 150,
-        columns: 4,
         itemWidth: 120,
         itemHeight: 160,
+        itemGap: 150,
+        columns: 4,
         isDragging: false,
         startX: 0,
         startY: 0,
@@ -109,7 +95,6 @@ const Gallery = () => {
         dragVelocityY: 0,
         lastDragTime: 0,
         mouseHasMoved: false,
-        lastUpdateTime: 0,
         lastX: 0,
         lastY: 0,
         isExpanded: false,
@@ -118,8 +103,6 @@ const Gallery = () => {
         originalPosition: null,
         expandedItem: null,
         activeItemId: null,
-        titleSplit: null,
-        // Cache the last computed visible range to skip redundant setState calls
         lastStartCol: null,
         lastEndCol: null,
         lastStartRow: null,
@@ -128,7 +111,7 @@ const Gallery = () => {
 
     const updateVisibleItems = useCallback(() => {
         const state = stateRef.current;
-        const buffer = 1.0;
+        const buffer = 0.4;
         const viewWidth = window.innerWidth * (1 + buffer);
         const viewHeight = window.innerHeight * (1 + buffer);
         const movingRight = state.targetX > state.currentX;
@@ -144,16 +127,16 @@ const Gallery = () => {
             (-state.currentX + viewWidth * 1.5 + (!movingRight ? directionBufferX : 0)) /
             (state.itemWidth + state.itemGap)
         );
+        // 🚀 FIX: Used state.itemHeight here instead of state.itemWidth for correct vertical chunking
         const startRow = Math.floor(
             (-state.currentY - viewHeight / 2 + (movingDown ? directionBufferY : 0)) /
-            (state.itemWidth + state.itemGap)
+            (state.itemHeight + state.itemGap)
         );
         const endRow = Math.ceil(
             (-state.currentY + viewHeight * 1.5 + (!movingDown ? directionBufferY : 0)) /
-            (state.itemWidth + state.itemGap)
+            (state.itemHeight + state.itemGap)
         );
 
-        // ✅ Skip setState entirely if the visible range hasn't changed
         if (
             startCol === state.lastStartCol &&
             endCol === state.lastEndCol &&
@@ -179,15 +162,6 @@ const Gallery = () => {
         const state = stateRef.current;
         if (!state.expandedItem || !state.originalPosition) return;
 
-        if (state.titleSplit) {
-            gsap.to(state.titleSplit.words, {
-                y: "-100%",
-                duration: 1,
-                stagger: 0.1,
-                ease: "power3.out"
-            });
-        }
-
         overlayRef.current.classList.remove("active");
         if (navbarRef.current) {
             navbarRef.current.classList.remove("bg-black");
@@ -206,6 +180,8 @@ const Gallery = () => {
         gsap.to(state.expandedItem, {
             width: state.itemWidth,
             height: state.itemHeight,
+            xPercent: -50,
+            yPercent: -50,
             x: originalRect.left + state.itemWidth / 2 - window.innerWidth / 2,
             y: originalRect.top + state.itemHeight / 2 - window.innerHeight / 2,
             duration: 1,
@@ -226,7 +202,7 @@ const Gallery = () => {
                 state.dragVelocityX = 0;
                 state.dragVelocityY = 0;
 
-                setExpandedItemId(null); // triggers Item re-render with correct visibility
+                setExpandedItemId(null);
                 if (containerRef.current) containerRef.current.style.cursor = "grab";
             }
         });
@@ -239,17 +215,6 @@ const Gallery = () => {
         state.activeItemId = item.id;
         state.canDrag = false;
         if (containerRef.current) containerRef.current.style.cursor = "auto";
-
-        const imgSrc = item.querySelector("img").src;
-        const imgMatch = imgSrc.match(/\/img(\d+)\.webp/);
-        const imgNum = imgMatch ? parseInt(imgMatch[1]) : 1;
-        const titleIndex = (imgNum - 1) % items.length;
-
-        if (state.titleSplit) state.titleSplit.revert();
-        projectTitleRef.current.textContent = items[titleIndex];
-        state.titleSplit = new SplitType(projectTitleRef.current, { types: "words" });
-        gsap.set(state.titleSplit.words, { y: "100%" });
-        gsap.to(state.titleSplit.words, { y: "0%", duration: 1, stagger: 0.1, ease: "power3.out" });
 
         const rect = item.getBoundingClientRect();
         const targetImg = item.querySelector("img").src;
@@ -269,8 +234,8 @@ const Gallery = () => {
         });
 
         const viewportWidth = window.innerWidth;
-        const targetWidth = viewportWidth * 0.4;
-        const targetHeight = targetWidth * 1.2;
+        const targetWidth = viewportWidth > 768 ? viewportWidth * 0.35 : viewportWidth * 0.7;
+        const targetHeight = targetWidth * (state.itemHeight / state.itemWidth);
 
         state.expandedItem = document.createElement("div");
         state.expandedItem.className = "expanded-item";
@@ -278,7 +243,6 @@ const Gallery = () => {
         state.expandedItem.style.height = `${state.itemHeight}px`;
 
         const img = document.createElement("img");
-        img.loading = "eager";
         img.decoding = "async";
         img.style.width = "100%";
         img.style.height = "100%";
@@ -288,7 +252,7 @@ const Gallery = () => {
 
         const onImageLoad = () => {
             item.style.visibility = "hidden";
-            setExpandedItemId(item.id); // causes Item to re-render with isVisible=false
+            setExpandedItemId(item.id);
 
             document.body.appendChild(state.expandedItem);
 
@@ -297,12 +261,16 @@ const Gallery = () => {
                 {
                     width: state.itemWidth,
                     height: state.itemHeight,
+                    xPercent: -50,
+                    yPercent: -50,
                     x: rect.left + state.itemWidth / 2 - window.innerWidth / 2,
                     y: rect.top + state.itemHeight / 2 - window.innerHeight / 2,
                 },
                 {
                     width: targetWidth,
                     height: targetHeight,
+                    xPercent: -50,
+                    yPercent: -50,
                     x: 0,
                     y: 0,
                     duration: 1,
@@ -334,7 +302,6 @@ const Gallery = () => {
         const state = stateRef.current;
 
         let animationFrameId;
-        // ✅ Throttle updateVisibleItems — only call every 150ms max
         let visibilityThrottle = null;
 
         const scheduleVisibilityUpdate = () => {
@@ -342,7 +309,7 @@ const Gallery = () => {
             visibilityThrottle = setTimeout(() => {
                 updateVisibleItems();
                 visibilityThrottle = null;
-            }, 150);
+            }, 100);
         };
 
         function animate() {
@@ -352,7 +319,6 @@ const Gallery = () => {
                 state.currentY += (state.targetY - state.currentY) * ease;
 
                 if (canvas) {
-                    // ✅ Use transform3d to force GPU compositing
                     canvas.style.transform = `translate3d(${state.currentX}px, ${state.currentY}px, 0)`;
                 }
 
@@ -361,8 +327,7 @@ const Gallery = () => {
                     Math.pow(state.currentY - state.lastY, 2)
                 );
 
-                // ✅ Increase threshold: only update DOM when moved 150px (was 100px)
-                if (distMoved > 150) {
+                if (distMoved > 100) {
                     scheduleVisibilityUpdate();
                     state.lastX = state.currentX;
                     state.lastY = state.currentY;
@@ -378,6 +343,8 @@ const Gallery = () => {
             state.mouseHasMoved = false;
             state.startX = e.clientX;
             state.startY = e.clientY;
+            state.dragVelocityX = 0;
+            state.dragVelocityY = 0;
             if (container) container.style.cursor = "grabbing";
         };
 
@@ -389,10 +356,14 @@ const Gallery = () => {
             if (Math.abs(dx) > 5 || Math.abs(dy) > 5) state.mouseHasMoved = true;
 
             const now = Date.now();
-            const dt = Math.max(10, now - state.lastDragTime);
+            const dt = Math.max(1, now - state.lastDragTime);
+            
+            const instantVelocityX = dx / dt;
+            const instantVelocityY = dy / dt;
+            state.dragVelocityX = (state.dragVelocityX * 0.6) + (instantVelocityX * 0.4);
+            state.dragVelocityY = (state.dragVelocityY * 0.6) + (instantVelocityY * 0.4);
+
             state.lastDragTime = now;
-            state.dragVelocityX = dx / dt;
-            state.dragVelocityY = dy / dt;
             state.targetX += dx;
             state.targetY += dy;
             state.startX = e.clientX;
@@ -404,15 +375,15 @@ const Gallery = () => {
             state.isDragging = false;
             if (state.canDrag) {
                 if (container) container.style.cursor = "grab";
-                if (Math.abs(state.dragVelocityX) > 0.1 || Math.abs(state.dragVelocityY) > 0.1) {
-                    state.targetX += state.dragVelocityX * 200;
-                    state.targetY += state.dragVelocityY * 200;
+                
+                if (Math.abs(state.dragVelocityX) > 0.05 || Math.abs(state.dragVelocityY) > 0.05) {
+                    state.targetX += state.dragVelocityX * 300; 
+                    state.targetY += state.dragVelocityY * 300;
                 }
+                
+                state.dragVelocityX = 0;
+                state.dragVelocityY = 0;
             }
-        };
-
-        const handleOverlayClick = () => {
-            if (state.isExpanded) closeExpandedItem();
         };
 
         const handleTouchStart = (e) => {
@@ -421,6 +392,8 @@ const Gallery = () => {
             state.mouseHasMoved = false;
             state.startX = e.touches[0].clientX;
             state.startY = e.touches[0].clientY;
+            state.dragVelocityX = 0;
+            state.dragVelocityY = 0;
         };
 
         const handleTouchMove = (e) => {
@@ -428,21 +401,73 @@ const Gallery = () => {
             const dx = e.touches[0].clientX - state.startX;
             const dy = e.touches[0].clientY - state.startY;
             if (Math.abs(dx) > 5 || Math.abs(dy) > 5) state.mouseHasMoved = true;
+
+            const now = Date.now();
+            const dt = Math.max(1, now - state.lastDragTime);
+            
+            const instantVelocityX = dx / dt;
+            const instantVelocityY = dy / dt;
+            state.dragVelocityX = (state.dragVelocityX * 0.6) + (instantVelocityX * 0.4);
+            state.dragVelocityY = (state.dragVelocityY * 0.6) + (instantVelocityY * 0.4);
+
+            state.lastDragTime = now;
             state.targetX += dx;
             state.targetY += dy;
             state.startX = e.touches[0].clientX;
             state.startY = e.touches[0].clientY;
         };
 
-        const handleTouchEnd = () => { state.isDragging = false; };
+        const handleTouchEnd = () => {
+            if (!state.isDragging) return;
+            state.isDragging = false;
+            if (state.canDrag) {
+                if (Math.abs(state.dragVelocityX) > 0.05 || Math.abs(state.dragVelocityY) > 0.05) {
+                    state.targetX += state.dragVelocityX * 300; 
+                    state.targetY += state.dragVelocityY * 300;
+                }
+                state.dragVelocityX = 0;
+                state.dragVelocityY = 0;
+            }
+        };
+
+        const handleOverlayClick = () => {
+            if (state.isExpanded) closeExpandedItem();
+        };
 
         const handleResize = () => {
+            const width = window.innerWidth;
+            let newW = 120, newH = 160, newGap = 150;
+
+            if (width > 1024) {
+                // Large Desktop
+                newW = 360; 
+                newH = 480; 
+                newGap = 250; // 🚀 Increased from 150 to 250
+            } else if (width > 768) {
+                // Tablet / Small Desktop
+                newW = 240; 
+                newH = 320; 
+                newGap = 200; // 🚀 Increased from 120 to 200
+            } else {
+                // Mobile
+                newW = 120; 
+                newH = 160; 
+                newGap = 150; // 🚀 Increased from 100 to 150
+            }
+
+            state.itemWidth = newW;
+            state.itemHeight = newH;
+            state.itemGap = newGap;
+            
+            setGridConfig({ itemWidth: newW, itemHeight: newH, itemGap: newGap });
+
+            state.lastStartCol = null; 
+
             if (state.isExpanded && state.expandedItem) {
-                const viewportWidth = window.innerWidth;
-                const targetWidth = viewportWidth * 0.4;
+                const targetWidth = width > 768 ? width * 0.35 : width * 0.7;
                 gsap.to(state.expandedItem, {
                     width: targetWidth,
-                    height: targetWidth * 1.2,
+                    height: targetWidth * (newH / newW), 
                     duration: 0.3,
                     ease: "power2.out",
                 });
@@ -451,12 +476,14 @@ const Gallery = () => {
             }
         };
 
+        handleResize();
+
         if (container) {
             container.addEventListener("mousedown", handleMouseDown);
             window.addEventListener("mousemove", handleMouseMove);
             window.addEventListener("mouseup", handleMouseUp);
-            container.addEventListener("touchstart", handleTouchStart);
-            window.addEventListener("touchmove", handleTouchMove);
+            container.addEventListener("touchstart", handleTouchStart, { passive: true });
+            window.addEventListener("touchmove", handleTouchMove, { passive: true });
             window.addEventListener("touchend", handleTouchEnd);
         }
         if (overlay) overlay.addEventListener("click", handleOverlayClick);
@@ -478,11 +505,11 @@ const Gallery = () => {
             }
             if (overlay) overlay.removeEventListener("click", handleOverlayClick);
             window.removeEventListener("resize", handleResize);
-            if (state.titleSplit) state.titleSplit.revert();
         };
     }, [updateVisibleItems, closeExpandedItem]);
 
-    const { itemWidth, itemHeight, itemGap, itemCount } = stateRef.current;
+    const { itemWidth, itemHeight, itemGap } = gridConfig;
+    const { itemCount } = stateRef.current;
 
     return (
         <div className="w-screen h-screen overflow-hidden">
@@ -513,10 +540,6 @@ const Gallery = () => {
                         ref={overlayRef}
                         className="overlay fixed top-0 left-0 w-full h-full bg-white pointer-events-none transition-opacity duration-300 ease-in-out opacity-0 z-[2]"
                     />
-                </div>
-
-                <div className="projectTitle absolute text-xl">
-                    <p ref={projectTitleRef}></p>
                 </div>
             </section>
 
