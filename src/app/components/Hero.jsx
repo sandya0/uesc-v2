@@ -167,7 +167,7 @@ const Hero = () => {
 
         <div
           ref={centerLinksRef}
-          className="flex flex-row justify-between items-center w-full gap-4 sm:gap-6 lg:gap-10 text-lg md:text-xl xl:text-2xl font-bold uppercase"
+          className="flex flex-row justify-between items-center w-full gap-4 sm:gap-6 lg:gap-10 text-lg md:text-lg xl:text-xl 2xl:text-2xl font-bold uppercase"
         >
           {centerLinks.map((text, i) => (
             <Link
@@ -187,11 +187,11 @@ const Hero = () => {
         >
 
           <Copy delay={2} animateOnScroll={false}>
-          <p className="max-w-full lg:max-w-3xl font-bold text-xl sm:text-2xl lg:text-3xl leading-relaxed text-left">
+          <p className="max-w-full lg:max-w-3xl font-bold text-lg sm:text-base lg:text-xl xl:text-xl 2xl:text-3xl leading-relaxed text-left">
             UESC (UMN English Student Council) is an organization that empowers UMN students to develop their English skills through engaging activities, competitions, and community-building programs.
           </p>
           </Copy>
-          <Link href="#" className="uppercase font-bold text-lg md:text-xl xl:text-2xl ml-0 sm:ml-auto self-start sm:self-end mt-4 sm:mt-0">
+          <Link href="#" className="uppercase font-bold text-lg xl:text-xl 2xl:text-2xl ml-0 sm:ml-auto self-start sm:self-end mt-4 sm:mt-0">
             Scroll Down
           </Link>
         </div>
