@@ -9,14 +9,17 @@ import './gallery.css';
 gsap.registerPlugin(CustomEase);
 CustomEase.create("hop", "0.9, 0, 0.1, 1");
 
-const Item = React.memo(({ id, col, row, itemWidth, itemHeight, itemGap, itemCount, onClick, isVisible }) => {
+const Item = React.memo(({ id, col, row, cellSize, itemCount, onClick, isVisible }) => {
     const itemRef = useRef(null);
     const itemNum = (Math.abs(row * 4 + col) % itemCount) + 1;
     const imgSrc = `/img${itemNum}.webp`;
 
-    // 🚀 FIX: yPos now correctly uses itemHeight instead of itemWidth!
-    const xPos = col * (itemWidth + itemGap);
-    const yPos = row * (itemHeight + itemGap);
+    const xPos = col * cellSize;
+    const yPos = row * cellSize;
+
+    // 🚀 Configurable Gap: 0.8 means images take up max 80% of the space, leaving a 20% gap!
+    const imageScale = 0.8; 
+    const maxImageSize = cellSize * imageScale;
 
     return (
         <div
@@ -31,8 +34,12 @@ const Item = React.memo(({ id, col, row, itemWidth, itemHeight, itemGap, itemCou
                 left: 0, 
                 visibility: isVisible ? 'visible' : 'hidden',
                 transform: `translate3d(${xPos}px, ${yPos}px, 0)`,
-                width: `${itemWidth}px`,
-                height: `${itemHeight}px`
+                width: 0,
+                height: 0,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                overflow: 'visible'
             }}
         >
             <img
@@ -40,7 +47,14 @@ const Item = React.memo(({ id, col, row, itemWidth, itemHeight, itemGap, itemCou
                 alt={`Image ${itemNum}`}
                 draggable={false}
                 decoding="async"
-                style={{ width: "100%", height: "100%", objectFit: "cover", pointerEvents: "none" }}
+                style={{ 
+                    width: "auto", 
+                    height: "auto", 
+                    // 🚀 Limits BOTH width and height so tall/wide images never overlap the grid cell
+                    maxWidth: `${maxImageSize}px`, 
+                    maxHeight: `${maxImageSize}px`,
+                    pointerEvents: "none" 
+                }}
             />
         </div>
     );
@@ -48,9 +62,7 @@ const Item = React.memo(({ id, col, row, itemWidth, itemHeight, itemGap, itemCou
     return (
         prev.id === next.id &&
         prev.isVisible === next.isVisible &&
-        prev.itemWidth === next.itemWidth &&
-        prev.itemHeight === next.itemHeight &&
-        prev.itemGap === next.itemGap
+        prev.cellSize === next.cellSize
     );
 });
 Item.displayName = 'Item';
@@ -75,14 +87,12 @@ const Gallery = () => {
     const [visibleItems, setVisibleItems] = useState([]);
     const [expandedItemId, setExpandedItemId] = useState(null);
     
-    // Increased default gap sizes
-    const [gridConfig, setGridConfig] = useState({ itemWidth: 120, itemHeight: 160, itemGap: 150 });
+    // Increased default cellSize to compensate for the images taking up 80% of it
+    const [gridConfig, setGridConfig] = useState({ cellSize: 350 });
 
     const stateRef = useRef({
         itemCount: 20,
-        itemWidth: 120,
-        itemHeight: 160,
-        itemGap: 150,
+        cellSize: 350,
         columns: 4,
         isDragging: false,
         startX: 0,
@@ -111,7 +121,7 @@ const Gallery = () => {
 
     const updateVisibleItems = useCallback(() => {
         const state = stateRef.current;
-        const buffer = 0.4;
+        const buffer = 0.6;
         const viewWidth = window.innerWidth * (1 + buffer);
         const viewHeight = window.innerHeight * (1 + buffer);
         const movingRight = state.targetX > state.currentX;
@@ -120,21 +130,16 @@ const Gallery = () => {
         const directionBufferY = movingDown ? -300 : 300;
 
         const startCol = Math.floor(
-            (-state.currentX - viewWidth / 2 + (movingRight ? directionBufferX : 0)) /
-            (state.itemWidth + state.itemGap)
+            (-state.currentX - viewWidth / 2 + (movingRight ? directionBufferX : 0)) / state.cellSize
         );
         const endCol = Math.ceil(
-            (-state.currentX + viewWidth * 1.5 + (!movingRight ? directionBufferX : 0)) /
-            (state.itemWidth + state.itemGap)
+            (-state.currentX + viewWidth * 1.5 + (!movingRight ? directionBufferX : 0)) / state.cellSize
         );
-        // 🚀 FIX: Used state.itemHeight here instead of state.itemWidth for correct vertical chunking
         const startRow = Math.floor(
-            (-state.currentY - viewHeight / 2 + (movingDown ? directionBufferY : 0)) /
-            (state.itemHeight + state.itemGap)
+            (-state.currentY - viewHeight / 2 + (movingDown ? directionBufferY : 0)) / state.cellSize
         );
         const endRow = Math.ceil(
-            (-state.currentY + viewHeight * 1.5 + (!movingDown ? directionBufferY : 0)) /
-            (state.itemHeight + state.itemGap)
+            (-state.currentY + viewHeight * 1.5 + (!movingDown ? directionBufferY : 0)) / state.cellSize
         );
 
         if (
@@ -178,12 +183,12 @@ const Gallery = () => {
         });
 
         gsap.to(state.expandedItem, {
-            width: state.itemWidth,
-            height: state.itemHeight,
+            width: originalRect.width,
+            height: originalRect.height,
             xPercent: -50,
             yPercent: -50,
-            x: originalRect.left + state.itemWidth / 2 - window.innerWidth / 2,
-            y: originalRect.top + state.itemHeight / 2 - window.innerHeight / 2,
+            x: originalRect.left + originalRect.width / 2 - window.innerWidth / 2,
+            y: originalRect.top + originalRect.height / 2 - window.innerHeight / 2,
             duration: 1,
             ease: "hop",
             onComplete: () => {
@@ -216,8 +221,9 @@ const Gallery = () => {
         state.canDrag = false;
         if (containerRef.current) containerRef.current.style.cursor = "auto";
 
-        const rect = item.getBoundingClientRect();
-        const targetImg = item.querySelector("img").src;
+        const imgElement = item.querySelector("img");
+        const rect = imgElement.getBoundingClientRect(); 
+        const targetImg = imgElement.src;
 
         state.originalPosition = { id: item.id, rect, imgSrc: targetImg };
 
@@ -233,20 +239,20 @@ const Gallery = () => {
             }
         });
 
+        const aspectRatio = rect.width / rect.height;
         const viewportWidth = window.innerWidth;
-        const targetWidth = viewportWidth > 768 ? viewportWidth * 0.35 : viewportWidth * 0.7;
-        const targetHeight = targetWidth * (state.itemHeight / state.itemWidth);
+        const targetWidth = viewportWidth > 768 ? viewportWidth * 0.4 : viewportWidth * 0.8;
+        const targetHeight = targetWidth / aspectRatio;
 
         state.expandedItem = document.createElement("div");
         state.expandedItem.className = "expanded-item";
-        state.expandedItem.style.width = `${state.itemWidth}px`;
-        state.expandedItem.style.height = `${state.itemHeight}px`;
+        state.expandedItem.style.width = `${rect.width}px`;
+        state.expandedItem.style.height = `${rect.height}px`;
 
         const img = document.createElement("img");
         img.decoding = "async";
         img.style.width = "100%";
         img.style.height = "100%";
-        img.style.objectFit = "cover";
         state.expandedItem.appendChild(img);
         state.expandedItem.addEventListener("click", closeExpandedItem);
 
@@ -259,12 +265,12 @@ const Gallery = () => {
             gsap.fromTo(
                 state.expandedItem,
                 {
-                    width: state.itemWidth,
-                    height: state.itemHeight,
+                    width: rect.width,
+                    height: rect.height,
                     xPercent: -50,
                     yPercent: -50,
-                    x: rect.left + state.itemWidth / 2 - window.innerWidth / 2,
-                    y: rect.top + state.itemHeight / 2 - window.innerHeight / 2,
+                    x: rect.left + rect.width / 2 - window.innerWidth / 2,
+                    y: rect.top + rect.height / 2 - window.innerHeight / 2,
                 },
                 {
                     width: targetWidth,
@@ -436,38 +442,29 @@ const Gallery = () => {
 
         const handleResize = () => {
             const width = window.innerWidth;
-            let newW = 120, newH = 160, newGap = 150;
+            let newCellSize = 350;
 
             if (width > 1024) {
-                // Large Desktop
-                newW = 360; 
-                newH = 480; 
-                newGap = 250; // 🚀 Increased from 150 to 250
+                newCellSize = 600; // Larger on Desktop
             } else if (width > 768) {
-                // Tablet / Small Desktop
-                newW = 240; 
-                newH = 320; 
-                newGap = 200; // 🚀 Increased from 120 to 200
+                newCellSize = 450; 
             } else {
-                // Mobile
-                newW = 120; 
-                newH = 160; 
-                newGap = 150; // 🚀 Increased from 100 to 150
+                newCellSize = 300; 
             }
 
-            state.itemWidth = newW;
-            state.itemHeight = newH;
-            state.itemGap = newGap;
-            
-            setGridConfig({ itemWidth: newW, itemHeight: newH, itemGap: newGap });
-
+            state.cellSize = newCellSize;
+            setGridConfig({ cellSize: newCellSize });
             state.lastStartCol = null; 
 
             if (state.isExpanded && state.expandedItem) {
-                const targetWidth = width > 768 ? width * 0.35 : width * 0.7;
+                const targetWidth = width > 768 ? width * 0.4 : width * 0.8;
+                const currentWidth = parseFloat(state.expandedItem.style.width);
+                const currentHeight = parseFloat(state.expandedItem.style.height);
+                const aspectRatio = currentWidth / currentHeight;
+
                 gsap.to(state.expandedItem, {
                     width: targetWidth,
-                    height: targetWidth * (newH / newW), 
+                    height: targetWidth / aspectRatio, 
                     duration: 0.3,
                     ease: "power2.out",
                 });
@@ -508,7 +505,7 @@ const Gallery = () => {
         };
     }, [updateVisibleItems, closeExpandedItem]);
 
-    const { itemWidth, itemHeight, itemGap } = gridConfig;
+    const { cellSize } = gridConfig;
     const { itemCount } = stateRef.current;
 
     return (
@@ -527,9 +524,7 @@ const Gallery = () => {
                                 id={item.id}
                                 col={item.col}
                                 row={item.row}
-                                itemWidth={itemWidth}
-                                itemHeight={itemHeight}
-                                itemGap={itemGap}
+                                cellSize={cellSize}
                                 itemCount={itemCount}
                                 onClick={handleItemClick}
                                 isVisible={expandedItemId !== item.id}
